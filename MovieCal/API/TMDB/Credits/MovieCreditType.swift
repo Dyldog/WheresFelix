@@ -24,7 +24,7 @@ extension MovieCreditType {
 }
 
 extension MovieCreditType {
-    var movie: Movie {
+    var movie: TMDBMovie {
         .init(
             id: id,
             imageURL: posterURL ?? Image.placeholderURL,

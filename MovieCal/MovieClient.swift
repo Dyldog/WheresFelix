@@ -24,7 +24,7 @@ class MovieClient {
     }
     
     @discardableResult
-    func getGenres(completion: @escaping APICompletion<[MovieGenre]>) -> URLSessionDataTask {
+    func getGenres(completion: @escaping APICompletion<[TMDBGenre]>) -> URLSessionDataTask {
         TMDBAPI.genres.retrieve(TMDBGenresResponse.self) { result in
             completion(result.map { $0.genres })
         }

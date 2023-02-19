@@ -8,5 +8,5 @@
 import Foundation
 
 struct TMDBGenresResponse: Decodable {
-    let genres: [MovieGenre]
+    let genres: [TMDBGenre]
 }

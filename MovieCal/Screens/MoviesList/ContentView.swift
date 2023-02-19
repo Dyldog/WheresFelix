@@ -10,7 +10,7 @@ import Nuke
 import NukeUI
 
 struct ContentView: View {
-    @StateObject var viewModel: ContentViewModel = .init()
+    @ObservedObject var viewModel: ContentViewModel
     @State var showSearch: Bool = false
     
     var body: some View {
@@ -37,11 +37,5 @@ struct ContentView: View {
                 showSearch = false
             }
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }

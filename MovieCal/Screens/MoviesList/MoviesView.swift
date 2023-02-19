@@ -11,9 +11,7 @@ import NukeUI
 
 struct MoviesView: View {
     @ObservedObject var viewModel: ContentViewModel
-    
-    @State var showFilter: Bool = false
-    
+        
     var body: some View {
         List {
             ForEach(viewModel.movieRows) { movie in
@@ -29,11 +27,11 @@ struct MoviesView: View {
         }
         .toolbar {
             Button("Filter") {
-                showFilter = true
+                viewModel.filterTapped()
             }
         }
-        .sheet(isPresented: $showFilter) {
-            FilterView(viewModel: viewModel.filterViewModel())
-        }
+        .sheet(item: $viewModel.filterViewModel, content: {
+            FilterView(viewModel: $0)
+        })
     }
 }
