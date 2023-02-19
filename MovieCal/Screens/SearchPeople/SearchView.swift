@@ -71,6 +71,7 @@ struct SearchView: View {
                         HStack {
                             LazyImage(url: row.imageURL)
                                 .frame(width: 100, height: 150)
+                                .cornerRadius(10)
                             Text(row.text)
                         }
                     }

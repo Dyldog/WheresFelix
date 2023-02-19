@@ -50,6 +50,7 @@
 		110F925529A17DCD00AD3DED /* PersonMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F925429A17DCD00AD3DED /* PersonMovie.swift */; };
 		110F925A29A1A93B00AD3DED /* CollectionConcurrencyKit in Frameworks */ = {isa = PBXBuildFile; productRef = 110F925929A1A93B00AD3DED /* CollectionConcurrencyKit */; };
 		110F925C29A2374200AD3DED /* TMDBMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F925B29A2374200AD3DED /* TMDBMovie.swift */; };
+		110F925E29A2435200AD3DED /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F925D29A2435200AD3DED /* DetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +113,7 @@
 		110F925229A178DA00AD3DED /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		110F925429A17DCD00AD3DED /* PersonMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonMovie.swift; sourceTree = "<group>"; };
 		110F925B29A2374200AD3DED /* TMDBMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBMovie.swift; sourceTree = "<group>"; };
+		110F925D29A2435200AD3DED /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -307,6 +309,7 @@
 				110F920B29A0972A00AD3DED /* SearchPeople */,
 				110F920A29A0972200AD3DED /* MoviesList */,
 				110F921C29A164FE00AD3DED /* Filter */,
+				110F925D29A2435200AD3DED /* DetailView.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -455,6 +458,7 @@
 				110F923429A1666900AD3DED /* MovieCredits.swift in Sources */,
 				110F923229A1665C00AD3DED /* MovieCastCredit.swift in Sources */,
 				110F920929A095F800AD3DED /* Thread+Closures.swift in Sources */,
+				110F925E29A2435200AD3DED /* DetailView.swift in Sources */,
 				110F91DC29A0846C00AD3DED /* ContentView.swift in Sources */,
 				110F922529A1657600AD3DED /* TMDBAPI.swift in Sources */,
 				110F921E29A1650600AD3DED /* FilterViewModel.swift in Sources */,
@@ -647,6 +651,7 @@
 				DEVELOPMENT_TEAM = 6CW3378X23;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Where's Felix?";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -676,6 +681,7 @@
 				DEVELOPMENT_TEAM = 6CW3378X23;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Where's Felix?";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

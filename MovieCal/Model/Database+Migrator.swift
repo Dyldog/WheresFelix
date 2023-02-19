@@ -25,6 +25,7 @@ extension Database {
                 t.autoIncrementedPrimaryKey("id")
                 t.column("title", .text).notNull()
                 t.column("imageURL", .text)
+                t.column("overview", .text)
             }
             
             try db.create(table: "genre", body: { t in

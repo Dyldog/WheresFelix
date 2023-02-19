@@ -29,6 +29,7 @@ struct MovieCellModel: Identifiable {
     let imageURL: URL
     let title: String
     let credits: String
+    let numCredits: Int
 }
 
 struct PersonCellModel: Identifiable {
@@ -42,6 +43,12 @@ struct TMDBMovieCredit {
     let person: MoviePerson
 }
 
+struct MovieDetailViewModel: Identifiable {
+    let id: UUID = .init()
+    let title: String
+    let description: String
+}
+
 class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     let client = MovieClient.shared
     private let database: Database
@@ -53,6 +60,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     @Published var peopleRows: [PersonCellModel] = []
     @Published var movieRows: [MovieCellModel] = []
     @Published var filterViewModel: FilterViewModel?
+    @Published var detailViewModel: MovieDetailViewModel?
     
     init(database: Database) {
         self.database = database
@@ -75,12 +83,13 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
             self.movieRows = await database.allCreditedMovies().filter { movie in
                 guard !selectedGenres.isEmpty else { return true }
                 return selectedGenres.containsAny(movie.genres.map { $0.id })
-            }.map { credit in
+            }.sorted(by: { $0.credits.count > $1.credits.count }).map { credit in
                 .init(
                     id: credit.movie.id,
                     imageURL: credit.movie.imageURL,
                     title: credit.movie.title,
-                    credits: credit.credits.map { $0.name }.joined(separator: ", ")
+                    credits: credit.credits.map { $0.name }.joined(separator: ", "),
+                    numCredits: credit.credits.count
                 )
             }
             self.peopleRows = await database.allPeople().map { person in
@@ -105,7 +114,8 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
                         .init(
                             id: $0.id,
                             imageURL: $0.imageURL,
-                            title: $0.title
+                            title: $0.title,
+                            overview: $0.overview
                         )
                     })
                     await self.database.saveCredits(personCredits.cast.map {
@@ -134,6 +144,25 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     func didUpdateSelectedGenres(_ ids: [Int]) {
         selectedGenres = ids
         reloadCells()
+    }
+    
+    func deletePerson(_ person: PersonCellModel) {
+        Task { @MainActor in
+            let people = await database.allPeople()
+            guard let person = people.first(where: { $0.id == person.id }) else { return }
+            await database.deletePerson(person)
+            reloadCells()
+        }
+    }
+    
+    func movieTapped(_ movie: MovieCellModel) {
+        Task { @MainActor in
+            let movies = await database.allCreditedMovies()
+            guard let movie = movies.first(where: { $0.movie.id == movie.id }) else { return }
+            detailViewModel = .init(
+                title: movie.movie.title, description: movie.movie.overview
+            )
+        }
     }
 }
 

@@ -11,19 +11,45 @@ import NukeUI
 
 struct MoviesView: View {
     @ObservedObject var viewModel: ContentViewModel
-        
+    
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
     var body: some View {
-        List {
-            ForEach(viewModel.movieRows) { movie in
-                HStack {
-                    LazyImage(url: movie.imageURL)
-                        .frame(width: 100, height: 150)
-                    VStack {
-                        Text(movie.title)
-                        Text(movie.credits).font(.subheadline)
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 20) {
+                ForEach(viewModel.movieRows) { movie in
+                    Button {
+                        viewModel.movieTapped(movie)
+                    } label: {
+                        VStack {
+                            ZStack {
+                                LazyImage(url: movie.imageURL)
+                                    .aspectRatio(1.0/1.5, contentMode: .fit)
+                                    .cornerRadius(10)
+                                    .overlay(alignment: .bottomTrailing) {
+                                        Text("\(movie.numCredits)")
+                                            .padding(.horizontal, 6)
+                                            .aspectRatio(1, contentMode: .fit)
+                                            .background(Color.red)
+                                            .foregroundColor(.white)
+                                            .fontWeight(.semibold)
+                                            .cornerRadius(10)
+                                            .padding(4)
+                                    }
+                            }
+                            Text(movie.title)
+                                .fontWeight(.semibold)
+                            Spacer()
+                        }
                     }
+                    .buttonStyle(PlainButtonStyle())
                 }
             }
+            .padding(.horizontal)
         }
         .toolbar {
             Button("Filter") {
@@ -33,5 +59,8 @@ struct MoviesView: View {
         .sheet(item: $viewModel.filterViewModel, content: {
             FilterView(viewModel: $0)
         })
+        .sheet(item: $viewModel.detailViewModel) {
+            DetailView(viewModel: $0)
+        }
     }
 }

@@ -12,7 +12,7 @@ struct Movie: Hashable, Codable, FetchableRecord, PersistableRecord {
     let id: Int
     let imageURL: URL
     let title: String
-    
+    let overview: String
     static let personMovie = hasMany(PersonMovie.self)
 //    let releaseDate: String
 //    let genreIDs: [Int]

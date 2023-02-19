@@ -12,6 +12,7 @@ protocol MovieCreditType {
     var id: Int { get }
     var title: String { get }
     var role: String { get}
+    var overview: String { get }
     var release_date: String { get }
     var poster_path: String? { get }
     var genre_ids: [Int] { get }
@@ -29,6 +30,7 @@ extension MovieCreditType {
             id: id,
             imageURL: posterURL ?? Image.placeholderURL,
             title: title,
+            overview: overview,
             releaseDate: release_date,
             genreIDs: genre_ids
         )

@@ -23,7 +23,7 @@ class Database {
             .appendingPathComponent("database", isDirectory: true)
         try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true)
         let dbURL = folderURL.appendingPathComponent("db.sqlite")
-        try fileManager.removeItem(at: dbURL)
+//        try fileManager.removeItem(at: dbURL)
         let dbPool = try DatabasePool(path: dbURL.path)
         return dbPool
     }
@@ -131,6 +131,36 @@ class Database {
                     try $0.insert(db, onConflict: .ignore)
                 }
             }
+        } catch {
+            print(error)
+        }
+    }
+    
+    private func deleteMovie(_ movie: Movie) async {
+        do {
+            _ = try await dbWriter.write { db in
+                try movie.delete(db)
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    private func deleteMoviesWithoutPeople() async {
+        let movies = await allCreditedMovies().filter { $0.credits.count == 0 }
+        
+        await movies.asyncForEach { movie in
+            await deleteMovie(movie.movie)
+        }
+    }
+    
+    func deletePerson(_ person: Person) async {
+        do {
+            _ = try await dbWriter.write { db in
+                try person.delete(db)
+            }
+            
+            await deleteMoviesWithoutPeople()
         } catch {
             print(error)
         }
