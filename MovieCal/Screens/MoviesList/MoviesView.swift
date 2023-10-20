@@ -36,7 +36,7 @@ struct MoviesView: View {
                                             .aspectRatio(1, contentMode: .fit)
                                             .background(Color.red)
                                             .foregroundColor(.white)
-                                            .fontWeight(.semibold)
+                                            .font(.body.bold())
                                             .cornerRadius(10)
                                             .padding(4)
                                     }

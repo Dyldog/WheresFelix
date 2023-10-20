@@ -15,6 +15,6 @@ struct MoviePerson: Decodable {
 
 extension MoviePerson {
     var imageURL: URL? {
-        profile_path.map { TMDBAPI.image(String($0.trimmingPrefix("/"))).url }
+        profile_path.map { TMDBAPI.image(String($0)).url }
     }
 }

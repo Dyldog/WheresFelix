@@ -20,9 +20,13 @@ extension API {
         Self.defaultParameters.merging(parameters, uniquingKeysWith: { a, b in b })
     }
     var url: URL {
-        baseURL.appending(component: path).appending(queryItems: allParameters.map {
+        var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
+        components.path = baseURL.path + path // the `URLComponents` is dropping the baseURL path
+        components.queryItems = allParameters.map {
             .init(name: $0.key, value: $0.value)
-        })
+        }
+        print(components.url!)
+        return components.url!
     }
     var request: URLRequest {
         let request = URLRequest(url: url)

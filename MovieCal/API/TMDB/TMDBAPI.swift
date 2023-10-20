@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import DylKit
 
 enum TMDBAPI: API {
     var baseURL: URL {
@@ -26,7 +27,7 @@ enum TMDBAPI: API {
         switch self {
         case .searchPeople: return "/search/person"
         case .getCredits(let id): return "/person/\(id)/movie_credits"
-        case .image(let path): return path
+        case .image(let path): return path.withPrefix("/")
         case .genres: return "/genre/movie/list"
         }
     }

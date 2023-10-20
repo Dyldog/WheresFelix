@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import DylKit
 
 protocol MovieCreditType {
     var id: Int { get }
@@ -20,7 +21,7 @@ protocol MovieCreditType {
 
 extension MovieCreditType {
     var posterURL: URL? {
-        poster_path.map { TMDBAPI.image(String($0.trimmingPrefix("/"))).url }
+        poster_path.map { TMDBAPI.image(String($0)).url }
     }
 }
 
