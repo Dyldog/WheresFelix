@@ -12,11 +12,7 @@ import NukeUI
 struct MoviesView: View {
     @ObservedObject var viewModel: ContentViewModel
     
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
+    let columns = Array(repeating: GridItem(.flexible(), alignment: .top), count: 3)
     
     var body: some View {
         ScrollView {
