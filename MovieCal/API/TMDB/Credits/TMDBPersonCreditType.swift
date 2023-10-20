@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import DylKit
 
-protocol TMDBMovieCreditType {
+protocol TMDBPersonCreditType {
     var id: Int { get }
     var title: String { get }
     var role: String { get}
@@ -19,13 +19,13 @@ protocol TMDBMovieCreditType {
     var genre_ids: [Int] { get }
 }
 
-extension TMDBMovieCreditType {
+extension TMDBPersonCreditType {
     var posterURL: URL? {
         poster_path.map { TMDBAPI.image(String($0)).url }
     }
 }
 
-extension TMDBMovieCreditType {
+extension TMDBPersonCreditType {
     var movie: TMDBMovie {
         .init(
             id: id,
@@ -38,7 +38,7 @@ extension TMDBMovieCreditType {
     }
 }
 
-extension Array where Element: TMDBMovieCreditType {
+extension Array where Element: TMDBPersonCreditType {
     func credits(for movie: Movie) -> [String] {
         self.filter { $0.id == movie.id }.map { $0.role }
     }

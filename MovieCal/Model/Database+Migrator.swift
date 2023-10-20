@@ -22,19 +22,19 @@ extension Database {
             // Create a table
             // See <https://swiftpackageindex.com/groue/grdb.swift/documentation/grdb/databaseschema>
             try db.create(table: "dbMovie") { t in
-                t.autoIncrementedPrimaryKey("id")
+                t.primaryKey("id", .integer)
                 t.column("title", .text).notNull()
                 t.column("imageURL", .text)
                 t.column("overview", .text)
             }
             
             try db.create(table: "genre", body: { t in
-                t.autoIncrementedPrimaryKey("id")
+                t.primaryKey("id", .integer)
                 t.column("name", .text).notNull()
             })
             
             try db.create(table: "person", body: { t in
-                t.autoIncrementedPrimaryKey("id")
+                t.primaryKey("id", .integer)
                 t.column("name", .text).notNull()
                 t.column("imageURL", .text)
             })
@@ -49,6 +49,11 @@ extension Database {
             try db.create(table: "movieGenre", body: { t in
                 t.column("genreId", .integer)
                     .references("genre", onDelete: .cascade)
+                t.column("movieId", .integer)
+                    .references("dbMovie", onDelete: .cascade)
+            })
+            
+            try db.create(table: "hiddenMovie", body: { t in
                 t.column("movieId", .integer)
                     .references("dbMovie", onDelete: .cascade)
             })

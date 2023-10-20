@@ -15,18 +15,21 @@ struct SearchCellModel: Identifiable {
     let onSelect: Block
 }
 
-class SearchViewModel: ObservableObject {
+class SearchViewModel: ObservableObject, Identifiable {
     
+    let id: UUID = .init()
     private let movies: MovieClient = .shared
     private var results: [Person] = []
     
     @Published var rows: [SearchCellModel] = []
+    let knownPeople: [Person]
     let onSelect: BlockIn<Person>
     
     var searchText: String = "" { didSet { search() } }
     private var searchRequest: URLSessionDataTask?
     
-    init(onSelect: @escaping BlockIn<Person>) {
+    init(known: [Person], onSelect: @escaping BlockIn<Person>) {
+        self.knownPeople = known
         self.onSelect = onSelect
     }
 
@@ -37,7 +40,7 @@ class SearchViewModel: ObservableObject {
             onMain {
                 if case let .success(people) = result {
                     self.results = people
-                    self.rows = people.map { person in
+                    self.rows = people.filter { !self.knownPeople.contains($0) }.map { person in
                             .init(
                                 id: "\(person.id)",
                                 imageURL: person.imageURL ?? Image.placeholderURL,
@@ -53,10 +56,10 @@ class SearchViewModel: ObservableObject {
 
 struct SearchView: View {
     
-    @StateObject var viewModel: SearchViewModel
+    @ObservedObject var viewModel: SearchViewModel
     
-    init(onSelect: @escaping BlockIn<Person>) {
-        _viewModel = .init(wrappedValue: .init(onSelect: onSelect))
+    init(viewModel: SearchViewModel) {
+        self.viewModel = viewModel
     }
     
     var body: some View {

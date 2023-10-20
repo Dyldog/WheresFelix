@@ -11,7 +11,6 @@ import NukeUI
 
 struct ContentView: View {
     @ObservedObject var viewModel: ContentViewModel
-    @State var showSearch: Bool = false
     
     var body: some View {
         ZStack {
@@ -30,10 +29,11 @@ struct ContentView: View {
                 loadingIndicator
             }
         }
+        .navigationTitle("Where's Felix?")
         .toolbar {
             HStack {
                 Button {
-                    showSearch = true
+                    viewModel.searchTapped()
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -45,11 +45,8 @@ struct ContentView: View {
                 }
             }
         }
-        .sheet(isPresented: $showSearch) {
-            SearchView {
-                viewModel.didAddPerson($0)
-                showSearch = false
-            }
+        .sheet(item: $viewModel.searchViewModel) {
+            SearchView(viewModel: $0)
         }
     }
     

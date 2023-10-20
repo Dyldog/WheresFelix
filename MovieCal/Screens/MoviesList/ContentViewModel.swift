@@ -23,12 +23,6 @@ struct PersonCellModel: Identifiable {
     let title: String
 }
 
-struct MovieDetailViewModel: Identifiable {
-    let id: UUID = .init()
-    let title: String
-    let description: String
-}
-
 class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     let client = MovieClient.shared
     private let database: Database
@@ -39,6 +33,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     @Published var movieRows: [MovieCellModel] = []
     @Published var filterViewModel: FilterViewModel?
     @Published var detailViewModel: MovieDetailViewModel?
+    @Published var searchViewModel: SearchViewModel?
     @Published var showLoading: Bool = false
     
     init(database: Database) {
@@ -64,7 +59,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     private func reloadCells() {
         Task { @MainActor in
             showLoading = true
-            self.movieRows = await database.allCreditedMovies().filter { movie in
+            self.movieRows = await database.allCreditedMovies(includeHidden: false).filter { movie in
                 guard !selectedGenres.isEmpty else { return true }
                 return selectedGenres.containsAny(movie.movie.genres.map { $0.id })
             }.sorted(by: { $0.credits.count > $1.credits.count }).map { credit in
@@ -76,6 +71,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
                     numCredits: credit.credits.count
                 )
             }
+            
             self.peopleRows = await database.allPeople().map { person in
                 .init(
                     id: person.id,
@@ -89,9 +85,6 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     }
     
     func didAddPerson(_ person: Person) {
-        
-        let domain = Person(id: person.id, name: person.name, imageURL: person.imageURL)
-        
         client.getCredits(for: person, genres: genres) { result in
             self.showLoading = true
             if case let .success(movies) = result {
@@ -109,8 +102,24 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
             self.showLoading = true
             let movies: [CreditedMovie] = await database.allCreditedMovies()
             let filteredGenres: [Genre] = Array(Set(movies.flatMap { $0.movie.genres }))
-            filterViewModel = .init(genres: filteredGenres, selectedIDs: selectedGenres, delegate: self)
+            filterViewModel = .init(
+                genres: filteredGenres,
+                selectedIDs: selectedGenres,
+                delegate: self
+            )
             self.showLoading = false
+        }
+    }
+    
+    func searchTapped() {
+        Task { @MainActor in
+            searchViewModel = .init(
+                known: await database.allPeople(),
+                onSelect: { [weak self] in
+                    self?.searchViewModel = nil
+                    self?.didAddPerson($0)
+                }
+            )
         }
     }
 
@@ -137,22 +146,25 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
             showLoading = true
             let movies = await database.allCreditedMovies()
             guard let movie = movies.first(where: { $0.movie.id == movie.id }) else { return }
-            detailViewModel = .init(
-                title: movie.movie.title, description: movie.movie.overview
-            )
+            detailViewModel = .init(movie: movie.movie, database: database, onUpdate: {
+                self.reloadCells()
+            }, dismiss: {
+                self.reloadCells()
+                self.detailViewModel = nil
+            })
             showLoading = false
         }
     }
 }
 
 
-extension TMDBMovieCredits {
+extension TMDBPersonCredits {
     var movies: [TMDBMovie] {
         Array(Set(cast.map { $0.movie }).union(Set(crew.map { $0.movie })))
      }
 }
 
-extension TMDBMovieCredits {
+extension TMDBPersonCredits {
     func credits(for movie: Movie) -> [String] {
         cast.credits(for: movie) + crew.credits(for: movie)
     }

@@ -44,9 +44,8 @@ class Database {
     
     func saveGenres(_ genres: [Genre]) {
         try! dbWriter.write { db in
-            _ = try Genre.deleteAll(db)
             try genres.forEach {
-                try $0.insert(db)
+                try $0.insert(db, onConflict: .ignore)
             }
         }
     }
@@ -116,10 +115,17 @@ class Database {
         }
     }
     
-    func allCreditedMovies() async -> [CreditedMovie] {
+    func allCreditedMovies(includeHidden: Bool = true) async -> [CreditedMovie] {
         let movies = await allMovies()
         do {
             return try await dbWriter.write { db in
+                var movies = movies
+                
+                if !includeHidden {
+                    let hidden = try HiddenMovie.fetchAll(db).map { $0.movieId }
+                    movies = includeHidden ? movies : movies.filter { !hidden.contains($0.id) }
+                }
+                
                 return try movies.map { movie in
                     try self.creditsForMovie(movie, db: db)
                 }
@@ -170,6 +176,20 @@ class Database {
             }
             
             await deleteMoviesWithoutPeople()
+        } catch {
+            print(error)
+        }
+    }
+}
+
+// MARK: - Hiding
+
+extension Database {
+    func hideMovie(_ movie: Movie) async {
+        do {
+            _ = try await dbWriter.write { db in
+                try HiddenMovie(movieId: movie.id).insert(db, onConflict: .ignore)
+            }
         } catch {
             print(error)
         }

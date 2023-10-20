@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import DylKit
 
 class MovieClient {
     static var shared: MovieClient = .init()
@@ -22,7 +23,7 @@ class MovieClient {
     
     @discardableResult
     func getCredits(for person: Person, genres: [Genre], completion: @escaping APICompletion<[Movie]>) -> URLSessionDataTask  {
-        TMDBAPI.getCredits(person.id).retrieve(TMDBMovieCredits.self) { result in
+        TMDBAPI.getCredits(person.id).retrieve(TMDBPersonCredits.self) { result in
             completion(result.map { credits in
                 credits.movies.map {
                     .init(
@@ -33,6 +34,22 @@ class MovieClient {
                         genres: $0.genreIDs.map { id in genres.first(where: { $0.id == id })! }
                     )
                 }
+            })
+        }
+    }
+    
+    @discardableResult
+    func getCredits(for movie: Movie, completion: @escaping APICompletion<[Person]>) -> URLSessionDataTask {
+        TMDBAPI.movieCredits(movie.id).retrieve(TMDBMovieCredits.self) { result in
+            completion(result.map { credits in
+                let people: [TMDBMovieCreditType] = (credits.cast + credits.crew).sorted(by: {
+                    $0.popularity > $1.popularity
+                })
+                
+                return people.map {
+                    Person(id: $0.id, name: $0.name, imageURL: $0.imageURL)
+                }
+                .unique
             })
         }
     }

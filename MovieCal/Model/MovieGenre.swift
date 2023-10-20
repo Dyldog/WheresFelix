@@ -11,6 +11,4 @@ import GRDB
 struct MovieGenre: Codable, FetchableRecord, PersistableRecord {
     let movieId: Int
     let genreId: Int
-//    static let 
-//    let genre: Genre
 }

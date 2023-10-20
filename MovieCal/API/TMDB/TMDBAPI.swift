@@ -20,6 +20,7 @@ enum TMDBAPI: API {
     
     case searchPeople(String)
     case getCredits(Int)
+    case movieCredits(Int)
     case image(String)
     case genres
     
@@ -27,6 +28,7 @@ enum TMDBAPI: API {
         switch self {
         case .searchPeople: return "/search/person"
         case .getCredits(let id): return "/person/\(id)/movie_credits"
+        case .movieCredits(let id): return "/movie/\(id)/credits"
         case .image(let path): return path.withPrefix("/")
         case .genres: return "/genre/movie/list"
         }
@@ -36,6 +38,7 @@ enum TMDBAPI: API {
         switch self {
         case .searchPeople(let query): return ["query": query]
         case .getCredits: return [:]
+        case .movieCredits: return [:]
         case .image: return [:]
         case .genres: return [:]
         }
