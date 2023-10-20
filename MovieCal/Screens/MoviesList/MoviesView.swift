@@ -47,11 +47,6 @@ struct MoviesView: View {
             }
             .padding(.horizontal)
         }
-        .toolbar {
-            Button("Filter") {
-                viewModel.filterTapped()
-            }
-        }
         .sheet(item: $viewModel.filterViewModel, content: {
             FilterView(viewModel: $0)
         })

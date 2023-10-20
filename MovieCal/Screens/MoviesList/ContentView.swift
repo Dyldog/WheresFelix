@@ -25,10 +25,18 @@ struct ContentView: View {
                 }
         }
         .toolbar {
-            Button {
-                showSearch = true
-            } label: {
-                Image(systemName: "plus")
+            HStack {
+                Button {
+                    showSearch = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+                
+                Button {
+                    viewModel.filterTapped()
+                } label: {
+                    Image(systemName: "camera.filters")
+                }
             }
         }
         .sheet(isPresented: $showSearch) {
