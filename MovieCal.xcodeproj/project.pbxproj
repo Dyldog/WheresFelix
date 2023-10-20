@@ -52,6 +52,7 @@
 		110F925C29A2374200AD3DED /* TMDBMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F925B29A2374200AD3DED /* TMDBMovie.swift */; };
 		110F925E29A2435200AD3DED /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F925D29A2435200AD3DED /* DetailView.swift */; };
 		FC94A9DF2AE2436300E1A595 /* DylKit in Frameworks */ = {isa = PBXBuildFile; productRef = FC94A9DE2AE2436300E1A595 /* DylKit */; };
+		FC94A9E12AE257DD00E1A595 /* CreditedMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94A9E02AE257DD00E1A595 /* CreditedMovie.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,6 +117,7 @@
 		110F925B29A2374200AD3DED /* TMDBMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBMovie.swift; sourceTree = "<group>"; };
 		110F925D29A2435200AD3DED /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		FC94A9DC2AE2434B00E1A595 /* DylKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DylKit; path = ../DylKit; sourceTree = "<group>"; };
+		FC94A9E02AE257DD00E1A595 /* CreditedMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditedMovie.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,6 +270,7 @@
 				110F924E29A1714B00AD3DED /* Genre.swift */,
 				110F925229A178DA00AD3DED /* Person.swift */,
 				110F925429A17DCD00AD3DED /* PersonMovie.swift */,
+				FC94A9E02AE257DD00E1A595 /* CreditedMovie.swift */,
 				110F925029A171E600AD3DED /* MovieGenre.swift */,
 			);
 			path = Model;
@@ -478,6 +481,7 @@
 			files = (
 				110F923429A1666900AD3DED /* TMDBMovieCredits.swift in Sources */,
 				110F923229A1665C00AD3DED /* TMDBMovieCastCredit.swift in Sources */,
+				FC94A9E12AE257DD00E1A595 /* CreditedMovie.swift in Sources */,
 				110F920929A095F800AD3DED /* Thread+Closures.swift in Sources */,
 				110F925E29A2435200AD3DED /* DetailView.swift in Sources */,
 				110F91DC29A0846C00AD3DED /* ContentView.swift in Sources */,

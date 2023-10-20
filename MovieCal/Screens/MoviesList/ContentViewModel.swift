@@ -9,21 +9,6 @@ import Foundation
 import SwiftUI
 import GRDB
 
-
-//struct CreditedMovie {
-//    let movie: Movie
-//    let credits: [(MoviePerson, [String])]
-//}
-//
-//extension CreditedMovie {
-//    var creditsString: String {
-//        credits.map {
-//            "\($0.0.name) (\($0.1.joined(separator: ", ")))"
-//        }
-//        .joined(separator: ", ")
-//    }
-//}
-
 struct MovieCellModel: Identifiable {
     let id: Int
     let imageURL: URL
@@ -38,11 +23,6 @@ struct PersonCellModel: Identifiable {
     let title: String
 }
 
-struct TMDBMovieCredit {
-    let movie: Movie
-    let person: TMDBMoviePerson
-}
-
 struct MovieDetailViewModel: Identifiable {
     let id: UUID = .init()
     let title: String
@@ -53,9 +33,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     let client = MovieClient.shared
     private let database: Database
     
-//    private var people: [MoviePerson] = []
-//    private var credits: [TMDBMovieCredit] = []
-    private var genres: [TMDBGenre] = []
+    private var genres: [Genre] = []
     private var selectedGenres: [Int] = []
     @Published var peopleRows: [PersonCellModel] = []
     @Published var movieRows: [MovieCellModel] = []
@@ -88,7 +66,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
             showLoading = true
             self.movieRows = await database.allCreditedMovies().filter { movie in
                 guard !selectedGenres.isEmpty else { return true }
-                return selectedGenres.containsAny(movie.genres.map { $0.id })
+                return selectedGenres.containsAny(movie.movie.genres.map { $0.id })
             }.sorted(by: { $0.credits.count > $1.credits.count }).map { credit in
                 .init(
                     id: credit.movie.id,
@@ -110,32 +88,15 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
         }
     }
     
-    func didAddPerson(_ person: TMDBMoviePerson) {
+    func didAddPerson(_ person: Person) {
         
         let domain = Person(id: person.id, name: person.name, imageURL: person.imageURL)
         
-        client.getCredits(for: person) { result in
+        client.getCredits(for: person, genres: genres) { result in
             self.showLoading = true
-            if case let .success(personCredits) = result {
+            if case let .success(movies) = result {
                 Task { @MainActor in
-                    await self.database.createPerson(domain)
-                    await self.database.saveMovies(personCredits.movies.map {
-                        .init(
-                            id: $0.id,
-                            imageURL: $0.imageURL,
-                            title: $0.title,
-                            overview: $0.overview
-                        )
-                    })
-                    await self.database.saveCredits(personCredits.cast.map {
-                        .init(personId: Int64(person.id), movieId: Int64($0.movie.id))
-                    })
-                    await self.database.saveGenres(personCredits.movies.flatMap { movie in
-                        movie.genreIDs.map {
-                            .init(movieId: movie.id, genreId: $0)
-                        }
-                    })
-                    
+                    await self.database.createPerson(person, with: movies)
                     self.reloadCells()
                     self.showLoading = false
                 }
@@ -147,7 +108,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
         Task { @MainActor in
             self.showLoading = true
             let movies: [CreditedMovie] = await database.allCreditedMovies()
-            let filteredGenres: [Genre] = Array(Set(movies.flatMap { $0.genres }))
+            let filteredGenres: [Genre] = Array(Set(movies.flatMap { $0.movie.genres }))
             filterViewModel = .init(genres: filteredGenres, selectedIDs: selectedGenres, delegate: self)
             self.showLoading = false
         }

@@ -9,8 +9,22 @@ import Foundation
 import GRDB
 import CollectionConcurrencyKit
 
+private struct DBMovie: Hashable, Codable, FetchableRecord, PersistableRecord {
+    let id: Int
+    let imageURL: URL
+    let title: String
+    let overview: String
+}
+
+private extension Movie {
+    var dbMovie: DBMovie {
+        .init(id: self.id, imageURL: self.imageURL, title: self.title, overview: self.overview)
+    }
+}
+
 class Database {
     private let dbWriter: DatabaseWriter
+    
     init() throws {
         self.dbWriter = try Self.createDB()
         try! self.migrator.migrate(self.dbWriter)
@@ -37,6 +51,26 @@ class Database {
         }
     }
     
+    private func makeMovieFromDBVersion(_ dbMovie: DBMovie) async -> Movie {
+        try! await dbWriter.read { db in
+            let genreMap = try MovieGenre
+                .filter(Column("movieId") == dbMovie.id)
+                .fetchAll(db)
+            
+            let genres = try genreMap.map {
+                try Genre.find(db, key: $0.genreId)
+            }
+            
+            return .init(
+                id: dbMovie.id,
+                imageURL: dbMovie.imageURL,
+                title: dbMovie.title,
+                overview: dbMovie.overview,
+                genres: genres
+            )
+        }
+    }
+    
     func allPeople() async -> [Person] {
         try! await dbWriter.read { db in
             return try Person.fetchAll(db)
@@ -44,9 +78,14 @@ class Database {
     }
     
     func allMovies() async -> [Movie] {
-        try! await dbWriter.read { db in
-            return try Movie.fetchAll(db)
+        func dbMovies() async -> [DBMovie] {
+            try! await dbWriter.read { db in
+                return try DBMovie.fetchAll(db)
+            }
         }
+        
+        return await dbMovies().asyncMap { await makeMovieFromDBVersion($0) }
+        
     }
     
     func allGenres() async -> [Genre] {
@@ -60,19 +99,11 @@ class Database {
             .filter(Column("movieId") == movie.id)
             .fetchAll(db)
         
-        let genreMap = try MovieGenre
-            .filter(Column("movieId") == movie.id)
-            .fetchAll(db)
-        
         let actors = try credits.map {
             try Person.find(db, key: $0.personId)
         }
         
-        let genres = try genreMap.map {
-            try Genre.find(db, key: $0.genreId)
-        }
-        
-        return CreditedMovie(movie: movie, credits: actors, genres: genres)
+        return CreditedMovie(movie: movie, credits: actors)
     }
     
     func creditsForMovie(_ movie: Movie) async throws -> CreditedMovie {
@@ -86,9 +117,9 @@ class Database {
     }
     
     func allCreditedMovies() async -> [CreditedMovie] {
+        let movies = await allMovies()
         do {
             return try await dbWriter.write { db in
-                let movies = try Movie.fetchAll(db)
                 return try movies.map { movie in
                     try self.creditsForMovie(movie, db: db)
                 }
@@ -98,48 +129,26 @@ class Database {
         }
     }
     
-    func createPerson(_ person: Person) async {
+    func createPerson(_ person: Person, with movies: [Movie]) async {
         try! await dbWriter.write { db in
             try person.insert(db)
-        }
-    }
-    
-    func saveMovies(_ movies: [Movie]) async {
-        try! await dbWriter.write { db in
-            try movies.forEach {
-                try $0.insert(db, onConflict: .ignore)
-            }
-        }
-    }
-    
-    func saveCredits(_ credits: [PersonMovie]) async {
-        do {
-            try await dbWriter.write { db in
-                try credits.forEach {
-                    try $0.insert(db, onConflict: .ignore)
+            try movies.forEach { movie in
+                try movie.dbMovie.insert(db, onConflict: .ignore)
+                try movie.genres.forEach { genre in
+                    try MovieGenre(movieId: movie.id, genreId: genre.id).insert(db, onConflict: .ignore)
                 }
+                try PersonMovie(personId: Int64(person.id), movieId: Int64(movie.id))
+                    .insert(db, onConflict: .ignore)
             }
-        } catch {
-            print(error)
-        }
-    }
-    
-    func saveGenres(_ genres: [MovieGenre]) async {
-        do {
-            try await dbWriter.write { db in
-                try genres.forEach {
-                    try $0.insert(db, onConflict: .ignore)
-                }
-            }
-        } catch {
-            print(error)
         }
     }
     
     private func deleteMovie(_ movie: Movie) async {
         do {
             _ = try await dbWriter.write { db in
-                try movie.delete(db)
+                try movie.dbMovie.delete(db)
+                try MovieGenre.filter(Column("movieId") == movie.id).deleteAll(db)
+                try PersonMovie.filter(Column("movieId") == movie.id).deleteAll(db)
             }
         } catch {
             print(error)

@@ -21,7 +21,7 @@ extension Database {
         migrator.registerMigration("createPlayer", foreignKeyChecks: .immediate) { db in
             // Create a table
             // See <https://swiftpackageindex.com/groue/grdb.swift/documentation/grdb/databaseschema>
-            try db.create(table: "movie") { t in
+            try db.create(table: "dbMovie") { t in
                 t.autoIncrementedPrimaryKey("id")
                 t.column("title", .text).notNull()
                 t.column("imageURL", .text)
@@ -41,20 +41,16 @@ extension Database {
             
             try db.create(table: "personMovie", body: { t in
                 t.column("personId", .integer)
-                    .indexed()
                     .references("person", onDelete: .cascade)
                 t.column("movieId", .integer)
-                    .indexed()
-                    .references("movie", onDelete: .cascade)
+                    .references("dbMovie", onDelete: .cascade)
             })
             
             try db.create(table: "movieGenre", body: { t in
                 t.column("genreId", .integer)
-                    .indexed()
                     .references("genre", onDelete: .cascade)
                 t.column("movieId", .integer)
-                    .indexed()
-                    .references("movie", onDelete: .cascade)
+                    .references("dbMovie", onDelete: .cascade)
             })
         }
         
