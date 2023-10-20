@@ -40,7 +40,7 @@ struct PersonCellModel: Identifiable {
 
 struct TMDBMovieCredit {
     let movie: Movie
-    let person: MoviePerson
+    let person: TMDBMoviePerson
 }
 
 struct MovieDetailViewModel: Identifiable {
@@ -110,7 +110,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
         }
     }
     
-    func didAddPerson(_ person: MoviePerson) {
+    func didAddPerson(_ person: TMDBMoviePerson) {
         
         let domain = Person(id: person.id, name: person.name, imageURL: person.imageURL)
         
@@ -185,13 +185,13 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
 }
 
 
-extension MovieCredits {
+extension TMDBMovieCredits {
     var movies: [TMDBMovie] {
         Array(Set(cast.map { $0.movie }).union(Set(crew.map { $0.movie })))
      }
 }
 
-extension MovieCredits {
+extension TMDBMovieCredits {
     func credits(for movie: Movie) -> [String] {
         cast.credits(for: movie) + crew.credits(for: movie)
     }

@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct MoviePerson: Decodable {
+struct TMDBMoviePerson: Decodable {
     let id: Int
     let name: String
     let profile_path: String?
 }
 
-extension MoviePerson {
+extension TMDBMoviePerson {
     var imageURL: URL? {
         profile_path.map { TMDBAPI.image(String($0)).url }
     }

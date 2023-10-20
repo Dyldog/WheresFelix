@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieCrewCredit: Decodable, MovieCreditType {
+struct TMDBMovieCrewCredit: Decodable, TMDBMovieCreditType {
     let id: Int
     let title: String
     let department: String

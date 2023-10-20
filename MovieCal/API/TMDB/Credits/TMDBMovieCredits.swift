@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieCredits: Decodable {
-    let crew: [MovieCrewCredit]
-    let cast: [MovieCastCredit]
+struct TMDBMovieCredits: Decodable {
+    let crew: [TMDBMovieCrewCredit]
+    let cast: [TMDBMovieCastCredit]
 }

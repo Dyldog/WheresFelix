@@ -18,15 +18,15 @@ struct SearchCellModel: Identifiable {
 class SearchViewModel: ObservableObject {
     
     private let movies: MovieClient = .shared
-    private var results: [MoviePerson] = []
+    private var results: [TMDBMoviePerson] = []
     
     @Published var rows: [SearchCellModel] = []
-    let onSelect: BlockIn<MoviePerson>
+    let onSelect: BlockIn<TMDBMoviePerson>
     
     var searchText: String = "" { didSet { search() } }
     private var searchRequest: URLSessionDataTask?
     
-    init(onSelect: @escaping BlockIn<MoviePerson>) {
+    init(onSelect: @escaping BlockIn<TMDBMoviePerson>) {
         self.onSelect = onSelect
     }
 
@@ -55,7 +55,7 @@ struct SearchView: View {
     
     @StateObject var viewModel: SearchViewModel
     
-    init(onSelect: @escaping BlockIn<MoviePerson>) {
+    init(onSelect: @escaping BlockIn<TMDBMoviePerson>) {
         _viewModel = .init(wrappedValue: .init(onSelect: onSelect))
     }
     

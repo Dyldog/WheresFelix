@@ -12,15 +12,15 @@ class MovieClient {
     static var shared: MovieClient = .init()
     
     @discardableResult
-    func searchPeople(for query: String, completion: @escaping APICompletion<[MoviePerson]>) -> URLSessionDataTask {
-        TMDBAPI.searchPeople(query).retrieve(TMDBPagedResponse<MoviePerson>.self) { result in
+    func searchPeople(for query: String, completion: @escaping APICompletion<[TMDBMoviePerson]>) -> URLSessionDataTask {
+        TMDBAPI.searchPeople(query).retrieve(TMDBPagedResponse<TMDBMoviePerson>.self) { result in
             completion(result.map { $0.results })
         }
     }
     
     @discardableResult
-    func getCredits(for person: MoviePerson, completion: @escaping APICompletion<MovieCredits>) -> URLSessionDataTask  {
-        TMDBAPI.getCredits(person.id).retrieve(MovieCredits.self, completion: completion)
+    func getCredits(for person: TMDBMoviePerson, completion: @escaping APICompletion<TMDBMovieCredits>) -> URLSessionDataTask  {
+        TMDBAPI.getCredits(person.id).retrieve(TMDBMovieCredits.self, completion: completion)
     }
     
     @discardableResult
