@@ -56,6 +56,7 @@
 		FC94A9E32AE2689C00E1A595 /* TMDBMovieCredits.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94A9E22AE2689C00E1A595 /* TMDBMovieCredits.swift */; };
 		FC94A9E52AE276F500E1A595 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94A9E42AE276F500E1A595 /* DetailViewModel.swift */; };
 		FC94A9E82AE2780B00E1A595 /* HiddenMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94A9E72AE2780B00E1A595 /* HiddenMovie.swift */; };
+		FC94A9EB2AE2812100E1A595 /* HideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94A9EA2AE2812100E1A595 /* HideView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +125,7 @@
 		FC94A9E22AE2689C00E1A595 /* TMDBMovieCredits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBMovieCredits.swift; sourceTree = "<group>"; };
 		FC94A9E42AE276F500E1A595 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		FC94A9E72AE2780B00E1A595 /* HiddenMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenMovie.swift; sourceTree = "<group>"; };
+		FC94A9EA2AE2812100E1A595 /* HideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -322,6 +324,7 @@
 		110F923E29A166FE00AD3DED /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				FC94A9E92AE2811600E1A595 /* Hide */,
 				110F920B29A0972A00AD3DED /* SearchPeople */,
 				110F920A29A0972200AD3DED /* MoviesList */,
 				110F921C29A164FE00AD3DED /* Filter */,
@@ -352,6 +355,14 @@
 				FC94A9E42AE276F500E1A595 /* DetailViewModel.swift */,
 			);
 			path = "Movie Detail";
+			sourceTree = "<group>";
+		};
+		FC94A9E92AE2811600E1A595 /* Hide */ = {
+			isa = PBXGroup;
+			children = (
+				FC94A9EA2AE2812100E1A595 /* HideView.swift */,
+			);
+			path = Hide;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -510,6 +521,7 @@
 				110F921929A0AC8400AD3DED /* PeopleView.swift in Sources */,
 				110F921B29A0B0BE00AD3DED /* FilterView.swift in Sources */,
 				FC94A9E32AE2689C00E1A595 /* TMDBMovieCredits.swift in Sources */,
+				FC94A9EB2AE2812100E1A595 /* HideView.swift in Sources */,
 				110F925C29A2374200AD3DED /* TMDBMovie.swift in Sources */,
 				110F924F29A1714B00AD3DED /* Genre.swift in Sources */,
 				110F922129A1654100AD3DED /* Blocks.swift in Sources */,

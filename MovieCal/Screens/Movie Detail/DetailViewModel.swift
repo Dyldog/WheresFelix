@@ -15,7 +15,14 @@ class MovieDetailViewModel: ObservableObject, Identifiable {
     let movie: Movie
     
     var title: String { movie.title }
-    var description: String { movie.overview }
+    var description: String {
+        return """
+        \(movie.genres.map { $0.name }.joined(separator: ", "))
+        \(movie.overview)
+        """
+        
+        
+    }
     @Published var knownActors: [Person] = []
     @Published var otherActors: [Person] = []
     let onUpdate: () -> Void

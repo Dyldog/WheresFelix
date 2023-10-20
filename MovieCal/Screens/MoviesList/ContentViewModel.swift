@@ -15,6 +15,7 @@ struct MovieCellModel: Identifiable {
     let title: String
     let credits: String
     let numCredits: Int
+    let toBeHidden: Bool
 }
 
 struct PersonCellModel: Identifiable {
@@ -31,14 +32,24 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     private var selectedGenres: [Int] = []
     @Published var peopleRows: [PersonCellModel] = []
     @Published var movieRows: [MovieCellModel] = []
+    
     @Published var filterViewModel: FilterViewModel?
     @Published var detailViewModel: MovieDetailViewModel?
     @Published var searchViewModel: SearchViewModel?
+    @Published var hideViewModel: HideViewModel?
+    
     @Published var showLoading: Bool = false
+    
+    @Published var hideMode: Bool = false
+    @Published var moviesToHide: [Int] = []
     
     init(database: Database) {
         self.database = database
         getGenres()
+    }
+    
+    func onAppear() {
+        reloadCells()
     }
     
     private func getGenres() {
@@ -68,7 +79,8 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
                     imageURL: credit.movie.imageURL,
                     title: credit.movie.title,
                     credits: credit.credits.map { $0.name }.joined(separator: ", "),
-                    numCredits: credit.credits.count
+                    numCredits: credit.credits.count,
+                    toBeHidden: hideMode && moviesToHide.contains(credit.movie.id)
                 )
             }
             
@@ -142,6 +154,15 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     }
     
     func movieTapped(_ movie: MovieCellModel) {
+        if hideMode {
+            moviesToHide.append(movie.id)
+            self.reloadCells()
+        } else {
+            showMovieDetail(movie)
+        }
+    }
+    
+    private func showMovieDetail(_ movie: MovieCellModel) {
         Task { @MainActor in
             showLoading = true
             let movies = await database.allCreditedMovies()
@@ -153,6 +174,23 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
                 self.detailViewModel = nil
             })
             showLoading = false
+        }
+    }
+    
+    func hideMoviesTapped() {
+        Task { @MainActor in
+            let movies = await database.allMovies().filter { moviesToHide.contains($0.id) }
+            hideViewModel = .init(
+                movies: movies,
+                database: database,
+                onUpdate: { },
+                dismis: {
+                    self.hideViewModel = nil
+                }
+            )
+            hideMode = false
+            moviesToHide = []
+            reloadCells()
         }
     }
 }

@@ -43,6 +43,12 @@ struct ContentView: View {
                 } label: {
                     Image(systemName: "camera.filters")
                 }
+                
+                Button {
+                    viewModel.hideMode.toggle()
+                } label: {
+                    Image(systemName: "eye.slash.fill")
+                }
             }
         }
         .sheet(item: $viewModel.searchViewModel) {

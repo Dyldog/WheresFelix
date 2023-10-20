@@ -25,7 +25,6 @@ extension API {
         components.queryItems = allParameters.map {
             .init(name: $0.key, value: $0.value)
         }
-        print(components.url!)
         return components.url!
     }
     var request: URLRequest {
