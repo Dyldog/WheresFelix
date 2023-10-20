@@ -51,6 +51,7 @@
 		110F925A29A1A93B00AD3DED /* CollectionConcurrencyKit in Frameworks */ = {isa = PBXBuildFile; productRef = 110F925929A1A93B00AD3DED /* CollectionConcurrencyKit */; };
 		110F925C29A2374200AD3DED /* TMDBMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F925B29A2374200AD3DED /* TMDBMovie.swift */; };
 		110F925E29A2435200AD3DED /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F925D29A2435200AD3DED /* DetailView.swift */; };
+		FC94A9DF2AE2436300E1A595 /* DylKit in Frameworks */ = {isa = PBXBuildFile; productRef = FC94A9DE2AE2436300E1A595 /* DylKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +115,7 @@
 		110F925429A17DCD00AD3DED /* PersonMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonMovie.swift; sourceTree = "<group>"; };
 		110F925B29A2374200AD3DED /* TMDBMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBMovie.swift; sourceTree = "<group>"; };
 		110F925D29A2435200AD3DED /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		FC94A9DC2AE2434B00E1A595 /* DylKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DylKit; path = ../DylKit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +123,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC94A9DF2AE2436300E1A595 /* DylKit in Frameworks */,
 				110F924729A16B9B00AD3DED /* GRDB in Frameworks */,
 				110F921329A0A56E00AD3DED /* Nuke in Frameworks */,
 				110F921529A0A56E00AD3DED /* NukeUI in Frameworks */,
@@ -148,10 +151,12 @@
 		110F91CD29A0846C00AD3DED = {
 			isa = PBXGroup;
 			children = (
+				FC94A9DB2AE2434B00E1A595 /* Packages */,
 				110F91D829A0846C00AD3DED /* MovieCal */,
 				110F91E929A0846E00AD3DED /* MovieCalTests */,
 				110F91F329A0846E00AD3DED /* MovieCalUITests */,
 				110F91D729A0846C00AD3DED /* Products */,
+				FC94A9DD2AE2436300E1A595 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -314,6 +319,21 @@
 			path = Screens;
 			sourceTree = "<group>";
 		};
+		FC94A9DB2AE2434B00E1A595 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				FC94A9DC2AE2434B00E1A595 /* DylKit */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		FC94A9DD2AE2436300E1A595 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -335,6 +355,7 @@
 				110F921429A0A56E00AD3DED /* NukeUI */,
 				110F924629A16B9B00AD3DED /* GRDB */,
 				110F925929A1A93B00AD3DED /* CollectionConcurrencyKit */,
+				FC94A9DE2AE2436300E1A595 /* DylKit */,
 			);
 			productName = MovieCal;
 			productReference = 110F91D629A0846C00AD3DED /* MovieCal.app */;
@@ -657,6 +678,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -687,6 +709,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -864,6 +887,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 110F925829A1A93B00AD3DED /* XCRemoteSwiftPackageReference "collectionconcurrencykit" */;
 			productName = CollectionConcurrencyKit;
+		};
+		FC94A9DE2AE2436300E1A595 /* DylKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DylKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

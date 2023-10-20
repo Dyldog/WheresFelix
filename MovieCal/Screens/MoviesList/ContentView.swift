@@ -14,15 +14,21 @@ struct ContentView: View {
     @State var showSearch: Bool = false
     
     var body: some View {
-        TabView {
-            MoviesView(viewModel: viewModel)
-                .tabItem {
-                    Label("Movies", systemImage: "film")
-                }
-            PeopleView(viewModel: viewModel)
-                .tabItem {
-                    Label("People", systemImage: "person")
-                }
+        ZStack {
+            TabView {
+                MoviesView(viewModel: viewModel)
+                    .tabItem {
+                        Label("Movies", systemImage: "film")
+                    }
+                PeopleView(viewModel: viewModel)
+                    .tabItem {
+                        Label("People", systemImage: "person")
+                    }
+            }
+            
+            if viewModel.showLoading {
+                loadingIndicator
+            }
         }
         .toolbar {
             HStack {
@@ -44,6 +50,19 @@ struct ContentView: View {
                 viewModel.didAddPerson($0)
                 showSearch = false
             }
+        }
+    }
+    
+    private var loadingIndicator: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(.white)
+                .frame(width: 80)
+                .aspectRatio(1, contentMode: .fit)
+                .opacity(0.9)
+            
+            ProgressView()
+                .progressViewStyle(.circular)
         }
     }
 }

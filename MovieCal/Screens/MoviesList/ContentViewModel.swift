@@ -61,6 +61,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     @Published var movieRows: [MovieCellModel] = []
     @Published var filterViewModel: FilterViewModel?
     @Published var detailViewModel: MovieDetailViewModel?
+    @Published var showLoading: Bool = false
     
     init(database: Database) {
         self.database = database
@@ -68,6 +69,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     }
     
     private func getGenres() {
+        showLoading = true
         client.getGenres { result in
             if case let .success(genres) = result {
                 self.genres = genres
@@ -75,11 +77,15 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
             }
             
             self.reloadCells()
+            // Should be called, but we're not on main, so just leaving it
+            // for the `reloadCells` to do
+            // self.showLoading = false
         }
     }
     
     private func reloadCells() {
-        Task { @MainActor in 
+        Task { @MainActor in
+            showLoading = true
             self.movieRows = await database.allCreditedMovies().filter { movie in
                 guard !selectedGenres.isEmpty else { return true }
                 return selectedGenres.containsAny(movie.genres.map { $0.id })
@@ -99,6 +105,8 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
                     title: person.name
                 )
             }
+            
+            showLoading = false
         }
     }
     
@@ -107,6 +115,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
         let domain = Person(id: person.id, name: person.name, imageURL: person.imageURL)
         
         client.getCredits(for: person) { result in
+            self.showLoading = true
             if case let .success(personCredits) = result {
                 Task { @MainActor in
                     await self.database.createPerson(domain)
@@ -128,6 +137,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
                     })
                     
                     self.reloadCells()
+                    self.showLoading = false
                 }
             }
         }
@@ -135,33 +145,41 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     
     func filterTapped() {
         Task { @MainActor in
+            self.showLoading = true
             let movies: [CreditedMovie] = await database.allCreditedMovies()
             let filteredGenres: [Genre] = Array(Set(movies.flatMap { $0.genres }))
             filterViewModel = .init(genres: filteredGenres, selectedIDs: selectedGenres, delegate: self)
+            self.showLoading = false
         }
     }
 
     func didUpdateSelectedGenres(_ ids: [Int]) {
+        showLoading = true
         selectedGenres = ids
         reloadCells()
+        showLoading = false
     }
     
     func deletePerson(_ person: PersonCellModel) {
         Task { @MainActor in
+            showLoading = true
             let people = await database.allPeople()
             guard let person = people.first(where: { $0.id == person.id }) else { return }
             await database.deletePerson(person)
             reloadCells()
+            showLoading = false
         }
     }
     
     func movieTapped(_ movie: MovieCellModel) {
         Task { @MainActor in
+            showLoading = true
             let movies = await database.allCreditedMovies()
             guard let movie = movies.first(where: { $0.movie.id == movie.id }) else { return }
             detailViewModel = .init(
                 title: movie.movie.title, description: movie.movie.overview
             )
+            showLoading = false
         }
     }
 }
