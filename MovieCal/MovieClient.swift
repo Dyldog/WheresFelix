@@ -22,15 +22,17 @@ class MovieClient {
     }
     
     @discardableResult
-    func getCredits(for person: Person, genres: [Genre], completion: @escaping APICompletion<[Movie]>) -> URLSessionDataTask  {
+    func getCredits(for person: Person, genres: [Genre], completion: @escaping APICompletion<[MovieWithGenres]>) -> URLSessionDataTask  {
         TMDBAPI.getCredits(person.id).retrieve(TMDBPersonCredits.self) { result in
             completion(result.map { credits in
                 credits.movies.map {
                     .init(
-                        id: $0.id,
-                        imageURL: $0.imageURL,
-                        title: $0.title,
-                        overview: $0.overview,
+                        movie: .init(
+                            id: $0.id,
+                            imageURL: $0.imageURL,
+                            title: $0.title,
+                            overview: $0.overview
+                        ),
                         genres: $0.genreIDs.map { id in genres.first(where: { $0.id == id })! }
                     )
                 }

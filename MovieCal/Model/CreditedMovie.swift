@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import GRDB
 
-struct CreditedMovie {
+struct CreditedMovie: FetchableRecord, Codable, TableRecord {
     let movie: Movie
-    let credits: [Person]
+    let genres: [Genre]
+    let people: [Person]
 }

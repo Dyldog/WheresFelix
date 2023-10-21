@@ -12,7 +12,7 @@ class MovieDetailViewModel: ObservableObject, Identifiable {
     private let database: Database
     
     let id: UUID = .init()
-    let movie: Movie
+    let movie: MovieWithGenres
     
     var title: String { movie.title }
     var description: String {
@@ -30,7 +30,7 @@ class MovieDetailViewModel: ObservableObject, Identifiable {
     
     private var genres: [Genre] = []
     
-    init(movie: Movie, database: Database, onUpdate: @escaping () -> Void, dismiss: @escaping () -> Void) {
+    init(movie: MovieWithGenres, database: Database, onUpdate: @escaping () -> Void, dismiss: @escaping () -> Void) {
         self.movie = movie
         self.database = database
         self.onUpdate = onUpdate
@@ -41,12 +41,12 @@ class MovieDetailViewModel: ObservableObject, Identifiable {
     private func load() {
         Task { @MainActor in
             genres = await database.allGenres()
-            let credited = try! await database.creditsForMovie(movie)
-            client.getCredits(for: movie) { result in
+            let credited = try! await database.creditsForMovie(movie.movie)
+            client.getCredits(for: movie.movie) { result in
                 guard case let .success(credits) = result else { return }
                 
                 onMain {
-                    self.knownActors = credited.credits
+                    self.knownActors = credited.people
                     self.otherActors = credits.filter { !self.knownActors.contains($0) }
                 }
             }
@@ -68,7 +68,7 @@ class MovieDetailViewModel: ObservableObject, Identifiable {
     
     func hideTapped() {
         Task { @MainActor in
-            await database.hideMovie(movie)
+            await database.hideMovie(movie.movie)
             self.dismiss()
         }
     }

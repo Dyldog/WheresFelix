@@ -72,14 +72,14 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
             showLoading = true
             self.movieRows = await database.allCreditedMovies(includeHidden: false).filter { movie in
                 guard !selectedGenres.isEmpty else { return true }
-                return movie.movie.genres.map { $0.id }.containsAll(in: selectedGenres)
-            }.sorted(by: { $0.credits.count > $1.credits.count }).map { credit in
+                return movie.genres.map { $0.id }.containsAll(in: selectedGenres)
+            }.sorted(by: { $0.people.count > $1.people.count }).map { credit in
                 .init(
                     id: credit.movie.id,
                     imageURL: credit.movie.imageURL,
                     title: credit.movie.title,
-                    credits: credit.credits.map { $0.name }.joined(separator: ", "),
-                    numCredits: credit.credits.count,
+                    credits: credit.people.map { $0.name }.joined(separator: ", "),
+                    numCredits: credit.people.count,
                     toBeHidden: hideMode && moviesToHide.contains(credit.movie.id)
                 )
             }

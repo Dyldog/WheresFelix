@@ -10,19 +10,6 @@ import GRDB
 import CollectionConcurrencyKit
 import DylKit
 
-private struct DBMovie: Hashable, Codable, FetchableRecord, PersistableRecord {
-    let id: Int
-    let imageURL: URL
-    let title: String
-    let overview: String
-}
-
-private extension Movie {
-    var dbMovie: DBMovie {
-        .init(id: self.id, imageURL: self.imageURL, title: self.title, overview: self.overview)
-    }
-}
-
 class Database {
     private let dbWriter: DatabaseWriter
     
@@ -38,7 +25,6 @@ class Database {
             .appendingPathComponent("database", isDirectory: true)
         try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true)
         let dbURL = folderURL.appendingPathComponent("db.sqlite")
-//        try fileManager.removeItem(at: dbURL)
         let dbPool = try DatabasePool(path: dbURL.path)
         return dbPool
     }
@@ -51,52 +37,24 @@ class Database {
         }
     }
     
-    private func makeMovieFromDBVersion(_ dbMovie: DBMovie) async -> Movie {
-        try! await dbWriter.read { db in
-            let genreMap = try MovieGenre
-                .filter(Column("movieId") == dbMovie.id)
-                .fetchAll(db)
-            
-            let genres = try genreMap.map {
-                try Genre.find(db, key: $0.genreId)
-            }
-            
-            return .init(
-                id: dbMovie.id,
-                imageURL: dbMovie.imageURL,
-                title: dbMovie.title,
-                overview: dbMovie.overview,
-                genres: genres
-            )
-        }
-    }
-    
     func allPeople() async -> [Person] {
         try! await dbWriter.read { db in
             return try Person.fetchAll(db)
         }
     }
     
-    func movie(with id: Int) async -> Movie? {
-        func getMovie() async -> DBMovie? {
-            try! await dbWriter.read({ db in
-                return try DBMovie.filter(Column("id") == id).fetchOne(db)
-            })
+    func movie(with id: Int) async -> MovieWithGenres? {
+        return try! await dbWriter.read { db in
+            let request = Movie.filter(Column("id") == id).including(all: Movie.genres)
+            return try MovieWithGenres.fetchOne(db, request)
         }
-        
-        let genres = await allGenres()
-        
-        return await getMovie().asyncMap { await makeMovieFromDBVersion($0) }
     }
     
-    func allMovies() async -> [Movie] {
-        func dbMovies() async -> [DBMovie] {
-            try! await dbWriter.read { db in
-                return try DBMovie.fetchAll(db)
-            }
+    func allMovies() async -> [MovieWithGenres] {
+        return try! await dbWriter.read { db in
+            let request = Movie.including(all: Movie.genres)
+            return try MovieWithGenres.fetchAll(db, request)
         }
-        
-        return await dbMovies().asyncMap { await makeMovieFromDBVersion($0) }
         
     }
     
@@ -107,15 +65,11 @@ class Database {
     }
     
     private func creditsForMovie(_ movie: Movie, db: GRDB.Database) throws -> CreditedMovie {
-        let credits = try PersonMovie
-            .filter(Column("movieId") == movie.id)
-            .fetchAll(db)
-        
-        let actors = try credits.map {
-            try Person.find(db, key: $0.personId)
-        }
-        
-        return CreditedMovie(movie: movie, credits: actors)
+        let request = Movie
+            .including(all: Movie.genres)
+            .including(all: Movie.people)
+            .filter(Column("id") == movie.id)
+        return try CreditedMovie.fetchOne(db, request)!
     }
     
     func creditsForMovie(_ movie: Movie) async throws -> CreditedMovie {
@@ -129,30 +83,25 @@ class Database {
     }
     
     func allCreditedMovies(includeHidden: Bool = true) async -> [CreditedMovie] {
-        let movies = await allMovies()
         do {
             return try await dbWriter.write { db in
-                var movies = movies
-                
-                if !includeHidden {
-                    let hidden = try HiddenMovie.fetchAll(db).map { $0.movieId }
-                    movies = includeHidden ? movies : movies.filter { !hidden.contains($0.id) }
-                }
-                
-                return try movies.map { movie in
-                    try self.creditsForMovie(movie, db: db)
-                }
+                let hiddenAlias = TableAlias()
+                let request = Movie.joining(optional: Movie.hidden.aliased(hiddenAlias))
+                    .including(all: Movie.genres)
+                    .including(all: Movie.people)
+                    .filter(!hiddenAlias.exists)
+                return try CreditedMovie.fetchAll(db, request)
             }
         } catch {
             fatalError(error.localizedDescription)
         }
     }
     
-    func createPerson(_ person: Person, with movies: [Movie]) async {
+    func createPerson(_ person: Person, with movies: [MovieWithGenres]) async {
         try! await dbWriter.write { db in
             try person.insert(db)
             try movies.forEach { movie in
-                try movie.dbMovie.insert(db, onConflict: .ignore)
+                try movie.movie.insert(db, onConflict: .ignore)
                 try movie.genres.forEach { genre in
                     try MovieGenre(movieId: movie.id, genreId: genre.id).insert(db, onConflict: .ignore)
                 }
@@ -165,7 +114,7 @@ class Database {
     private func deleteMovie(_ movie: Movie) async {
         do {
             _ = try await dbWriter.write { db in
-                try movie.dbMovie.delete(db)
+                try movie.delete(db)
                 try MovieGenre.filter(Column("movieId") == movie.id).deleteAll(db)
                 try PersonMovie.filter(Column("movieId") == movie.id).deleteAll(db)
             }
@@ -175,7 +124,7 @@ class Database {
     }
     
     private func deleteMoviesWithoutPeople() async {
-        let movies = await allCreditedMovies().filter { $0.credits.count == 0 }
+        let movies = await allCreditedMovies().filter { $0.people.count == 0 }
         
         await movies.asyncForEach { movie in
             await deleteMovie(movie.movie)

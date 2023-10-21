@@ -17,13 +17,13 @@ class HideViewModel: ObservableObject, Identifiable {
     let onUpdate: () -> Void
     let dismis: () -> Void
     
-    var movies: [Movie]
+    var movies: [MovieWithGenres]
     private var genres: [Genre] = []
     
-    @Published var movie: Movie?
+    @Published var movie: MovieWithGenres?
     @Published var people: [Person] = []
     
-    init(movies: [Movie], database: Database, onUpdate: @escaping () -> Void, dismis: @escaping () -> Void) {
+    init(movies: [MovieWithGenres], database: Database, onUpdate: @escaping () -> Void, dismis: @escaping () -> Void) {
         self.database = database
         self.movies = movies
         self.dismis = dismis
@@ -41,11 +41,11 @@ class HideViewModel: ObservableObject, Identifiable {
                 genres = await database.allGenres()
             }
             
-            let credited = try! await database.creditsForMovie(movie)
+            let credited = try! await database.creditsForMovie(movie.movie)
             
-            client.getCredits(for: movie) { result in
+            client.getCredits(for: movie.movie) { result in
                 guard case let .success(people) = result else { return }
-                let others = people.filter { !credited.credits.contains($0) }
+                let others = people.filter { !credited.people.contains($0) }
                 
                 onMain {
                     self.movie = movie
@@ -67,7 +67,7 @@ class HideViewModel: ObservableObject, Identifiable {
         }
         
         Task { @MainActor in
-            await self.database.hideMovie(self.movie!)
+            await self.database.hideMovie(self.movie!.movie)
             self.onUpdate()
             self.nextMovie()
         }
@@ -88,7 +88,7 @@ struct HideView: View {
     var body: some View {
         VStack {
             if let movie = viewModel.movie {
-                HideMovieView(movie: movie, people: viewModel.people, onSelect: {
+                HideMovieView(movie: movie.movie, people: viewModel.people, onSelect: {
                     viewModel.peopleSelected($0)
                 })
                 .id(movie.id)
