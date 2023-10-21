@@ -11,6 +11,7 @@ import NukeUI
 
 struct ContentView: View {
     @ObservedObject var viewModel: ContentViewModel
+    @State var showFileImporter: Bool = false
     
     var body: some View {
         ZStack {
@@ -53,6 +54,18 @@ struct ContentView: View {
         }
         .sheet(item: $viewModel.searchViewModel) {
             SearchView(viewModel: $0)
+        }
+        .if(viewModel.showNotes) {
+            $0.fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.folder]) { result in
+                showFileImporter = false
+                
+                switch result {
+                case let .success(url): viewModel.didSelectNotesFolder(url)
+                case .failure: break
+                }
+            }
+        }.onAppear {
+            showFileImporter = true
         }
     }
     

@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import GRDB
+import DylKit
 
 struct MovieCellModel: Identifiable {
     let id: Int
@@ -27,28 +28,38 @@ struct PersonCellModel: Identifiable {
 class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     let client = MovieClient.shared
     private let database: Database
+    private let notes: NotesClient = .shared
     
     private var genres: [Genre] = []
     private var selectedGenres: [Int] = []
+    private var movieNotes: [Note] = []
+    
     @Published var peopleRows: [PersonCellModel] = []
     @Published var movieRows: [MovieCellModel] = []
-    
     @Published var filterViewModel: FilterViewModel?
     @Published var detailViewModel: MovieDetailViewModel?
     @Published var searchViewModel: SearchViewModel?
     @Published var hideViewModel: HideViewModel?
     
     @Published var showLoading: Bool = false
+    var showNotes: Bool { !notes.hasSelectedDirectory }
     
     @Published var hideMode: Bool = false
     @Published var moviesToHide: [Int] = []
     
     init(database: Database) {
         self.database = database
-        getGenres()
+        onAppear()
     }
     
     func onAppear() {
+        if genres.isEmpty {
+            getGenres()
+        }
+        
+        if notes.hasSelectedDirectory {
+            movieNotes = notes.movieNotes()
+        }
         reloadCells()
     }
     
@@ -70,7 +81,8 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     private func reloadCells() {
         Task { @MainActor in
             showLoading = true
-            self.movieRows = await database.allCreditedMovies(includeHidden: false).filter { movie in
+            let noteMovieTitles = movieNotes.map { $0.title }
+            self.movieRows = await database.allCreditedMovies(excludingTitles: noteMovieTitles, includeHidden: false).filter { movie in
                 guard !selectedGenres.isEmpty else { return true }
                 return movie.genres.map { $0.id }.containsAll(in: selectedGenres)
             }.sorted(by: { $0.people.count > $1.people.count }).map { credit in
@@ -193,37 +205,11 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     }
 }
 
+// MARK: - Notes
 
-extension TMDBPersonCredits {
-    var movies: [TMDBMovie] {
-        Array(Set(cast.map { $0.movie }).union(Set(crew.map { $0.movie })))
-     }
-}
-
-extension TMDBPersonCredits {
-    func credits(for movie: Movie) -> [String] {
-        cast.credits(for: movie) + crew.credits(for: movie)
-    }
-}
-
-extension Array {
-    func any(_ condition: (Element) -> Bool) -> Bool {
-        if first(where: { condition($0) }) != nil {
-            return true
-        } else {
-            return false
-        }
-    }
-}
-
-extension Array where Element: Equatable {
-    func containsAny(_ others: [Element]) -> Bool {
-        self.any { element in
-            others.contains(element)
-        }
-    }
-    
-    func containsAll(in others: [Element]) -> Bool {
-        others.allSatisfy { self.contains($0) }
+extension ContentViewModel {
+    func didSelectNotesFolder(_ url: URL) {
+        notes.setDirectory(url)
+        onAppear()
     }
 }

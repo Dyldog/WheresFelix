@@ -25,6 +25,7 @@ class Database {
             .appendingPathComponent("database", isDirectory: true)
         try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true)
         let dbURL = folderURL.appendingPathComponent("db.sqlite")
+//        try! fileManager.removeItem(at: dbURL)
         let dbPool = try DatabasePool(path: dbURL.path)
         return dbPool
     }
@@ -82,7 +83,7 @@ class Database {
         }
     }
     
-    func allCreditedMovies(includeHidden: Bool = true) async -> [CreditedMovie] {
+    func allCreditedMovies(excludingTitles excludedTitles: [String] = [], includeHidden: Bool = true) async -> [CreditedMovie] {
         do {
             return try await dbWriter.write { db in
                 let hiddenAlias = TableAlias()
@@ -90,6 +91,7 @@ class Database {
                     .including(all: Movie.genres)
                     .including(all: Movie.people)
                     .filter(!hiddenAlias.exists)
+                    .filter(!excludedTitles.contains(Column(("title"))))
                 return try CreditedMovie.fetchAll(db, request)
             }
         } catch {

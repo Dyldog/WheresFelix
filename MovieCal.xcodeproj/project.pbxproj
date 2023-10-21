@@ -51,6 +51,7 @@
 		110F925A29A1A93B00AD3DED /* CollectionConcurrencyKit in Frameworks */ = {isa = PBXBuildFile; productRef = 110F925929A1A93B00AD3DED /* CollectionConcurrencyKit */; };
 		110F925C29A2374200AD3DED /* TMDBMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F925B29A2374200AD3DED /* TMDBMovie.swift */; };
 		110F925E29A2435200AD3DED /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F925D29A2435200AD3DED /* DetailView.swift */; };
+		FC8838352AE391AD00AB8CC4 /* NotesClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8838342AE391AD00AB8CC4 /* NotesClient.swift */; };
 		FC94A9DF2AE2436300E1A595 /* DylKit in Frameworks */ = {isa = PBXBuildFile; productRef = FC94A9DE2AE2436300E1A595 /* DylKit */; };
 		FC94A9E12AE257DD00E1A595 /* CreditedMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94A9E02AE257DD00E1A595 /* CreditedMovie.swift */; };
 		FC94A9E32AE2689C00E1A595 /* TMDBMovieCredits.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94A9E22AE2689C00E1A595 /* TMDBMovieCredits.swift */; };
@@ -120,6 +121,7 @@
 		110F925429A17DCD00AD3DED /* PersonMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonMovie.swift; sourceTree = "<group>"; };
 		110F925B29A2374200AD3DED /* TMDBMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBMovie.swift; sourceTree = "<group>"; };
 		110F925D29A2435200AD3DED /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		FC8838342AE391AD00AB8CC4 /* NotesClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesClient.swift; sourceTree = "<group>"; };
 		FC94A9DC2AE2434B00E1A595 /* DylKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DylKit; path = ../DylKit; sourceTree = "<group>"; };
 		FC94A9E02AE257DD00E1A595 /* CreditedMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditedMovie.swift; sourceTree = "<group>"; };
 		FC94A9E22AE2689C00E1A595 /* TMDBMovieCredits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBMovieCredits.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 				110F920729A095E800AD3DED /* Extensions */,
 				110F91D929A0846C00AD3DED /* MovieCalApp.swift */,
 				110F920529A084AD00AD3DED /* MovieClient.swift */,
+				FC8838342AE391AD00AB8CC4 /* NotesClient.swift */,
 				110F922629A1659300AD3DED /* Model */,
 				110F921F29A1653500AD3DED /* API */,
 				110F923E29A166FE00AD3DED /* Screens */,
@@ -518,6 +521,7 @@
 				FC94A9E52AE276F500E1A595 /* DetailViewModel.swift in Sources */,
 				110F921E29A1650600AD3DED /* FilterViewModel.swift in Sources */,
 				110F91DA29A0846C00AD3DED /* MovieCalApp.swift in Sources */,
+				FC8838352AE391AD00AB8CC4 /* NotesClient.swift in Sources */,
 				110F921929A0AC8400AD3DED /* PeopleView.swift in Sources */,
 				110F921B29A0B0BE00AD3DED /* FilterView.swift in Sources */,
 				FC94A9E32AE2689C00E1A595 /* TMDBMovieCredits.swift in Sources */,
