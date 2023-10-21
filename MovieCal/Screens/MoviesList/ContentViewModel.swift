@@ -72,7 +72,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
             showLoading = true
             self.movieRows = await database.allCreditedMovies(includeHidden: false).filter { movie in
                 guard !selectedGenres.isEmpty else { return true }
-                return selectedGenres.containsAny(movie.movie.genres.map { $0.id })
+                return movie.movie.genres.map { $0.id }.containsAll(in: selectedGenres)
             }.sorted(by: { $0.credits.count > $1.credits.count }).map { credit in
                 .init(
                     id: credit.movie.id,
@@ -112,10 +112,9 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     func filterTapped() {
         Task { @MainActor in
             self.showLoading = true
-            let movies: [CreditedMovie] = await database.allCreditedMovies()
-            let filteredGenres: [Genre] = Array(Set(movies.flatMap { $0.movie.genres }))
+            let genres = await database.allGenres()
             filterViewModel = .init(
-                genres: filteredGenres,
+                genres: genres,
                 selectedIDs: selectedGenres,
                 delegate: self
             )
@@ -165,9 +164,8 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     private func showMovieDetail(_ movie: MovieCellModel) {
         Task { @MainActor in
             showLoading = true
-            let movies = await database.allCreditedMovies()
-            guard let movie = movies.first(where: { $0.movie.id == movie.id }) else { return }
-            detailViewModel = .init(movie: movie.movie, database: database, onUpdate: {
+            guard let movie = await database.movie(with: movie.id) else { return }
+            detailViewModel = .init(movie: movie, database: database, onUpdate: {
                 self.reloadCells()
             }, dismiss: {
                 self.reloadCells()
@@ -223,5 +221,9 @@ extension Array where Element: Equatable {
         self.any { element in
             others.contains(element)
         }
+    }
+    
+    func containsAll(in others: [Element]) -> Bool {
+        others.allSatisfy { self.contains($0) }
     }
 }

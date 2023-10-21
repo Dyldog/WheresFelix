@@ -8,6 +8,7 @@
 import Foundation
 import GRDB
 import CollectionConcurrencyKit
+import DylKit
 
 private struct DBMovie: Hashable, Codable, FetchableRecord, PersistableRecord {
     let id: Int
@@ -74,6 +75,18 @@ class Database {
         try! await dbWriter.read { db in
             return try Person.fetchAll(db)
         }
+    }
+    
+    func movie(with id: Int) async -> Movie? {
+        func getMovie() async -> DBMovie? {
+            try! await dbWriter.read({ db in
+                return try DBMovie.filter(Column("id") == id).fetchOne(db)
+            })
+        }
+        
+        let genres = await allGenres()
+        
+        return await getMovie().asyncMap { await makeMovieFromDBVersion($0) }
     }
     
     func allMovies() async -> [Movie] {

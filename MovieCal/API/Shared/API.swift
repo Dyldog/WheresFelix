@@ -37,7 +37,7 @@ extension API {
     @discardableResult
     func retrieve<T: Decodable>(_ type: T.Type, completion: @escaping  BlockIn<Result<T, APIError>>) -> URLSessionDataTask {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
+            if let _ = error {
                 completion(.failure(.general))
                 return
             } else if let data = data {

@@ -17,7 +17,7 @@ class MovieDetailViewModel: ObservableObject, Identifiable {
     var title: String { movie.title }
     var description: String {
         return """
-        \(movie.genres.map { $0.name }.joined(separator: ", "))
+        \(movie.genres.unique.map { $0.name }.joined(separator: ", "))
         \(movie.overview)
         """
         
