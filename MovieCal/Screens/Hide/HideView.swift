@@ -55,7 +55,7 @@ class HideViewModel: ObservableObject, Identifiable {
         }
     }
     
-    func peopleSelected(_ people: [Person]) {
+    func peopleSelected(_ people: [Person], hide: Bool) {
         people.forEach { person in
             client.getCredits(for: person, genres: genres) { result in
                 guard case let .success(movies) = result else { return }
@@ -67,7 +67,10 @@ class HideViewModel: ObservableObject, Identifiable {
         }
         
         Task { @MainActor in
-            await self.database.hideMovie(self.movie!.movie)
+            if hide {
+                await self.database.hideMovie(self.movie!.movie)
+            }
+            
             self.onUpdate()
             self.nextMovie()
         }
@@ -89,7 +92,7 @@ struct HideView: View {
         VStack {
             if let movie = viewModel.movie {
                 HideMovieView(movie: movie.movie, people: viewModel.people, onSelect: {
-                    viewModel.peopleSelected($0)
+                    viewModel.peopleSelected($0, hide: $1)
                 })
                 .id(movie.id)
             } else {
@@ -101,7 +104,7 @@ struct HideView: View {
 struct HideMovieView: View {
     let movie: Movie
     let people: [Person]
-    let onSelect: ([Person]) -> Void
+    let onSelect: ([Person], Bool) -> Void
     
     @State var selectedPeople: [Int] = []
     
@@ -148,15 +151,24 @@ struct HideMovieView: View {
             .padding(.vertical)
         }
         
+        HStack {
+            bottomButton(title: selectedPeople.isEmpty ? "Skip" : "Don't Hide", color: .red, hide: false)
+                .buttonStyle(.bordered)
+            bottomButton(title: selectedPeople.isEmpty ? "Hide" : "Add & Hide", color: .blue, hide: true)
+                .buttonStyle(.borderedProminent)
+        }
+        .padding()
+    }
+    
+    private func bottomButton(title: String, color: Color, hide: Bool) -> some View {
         Button(action: {
-            onSelect(people.filter { self.selectedPeople.contains($0.id) })
+            onSelect(people.filter { self.selectedPeople.contains($0.id) }, hide)
         }, label: {
-            Text(selectedPeople.isEmpty ? "Skip" : "Add People")
+            Text(title)
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity)
         })
-        .buttonStyle(.borderedProminent)
+        .tint(color)
         .frame(maxWidth: .infinity)
-        .padding()
     }
 }

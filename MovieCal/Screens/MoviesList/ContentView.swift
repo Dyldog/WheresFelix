@@ -20,6 +20,7 @@ struct ContentView: View {
                     .tabItem {
                         Label("Movies", systemImage: "film")
                     }
+                
                 PeopleView(viewModel: viewModel)
                     .tabItem {
                         Label("People", systemImage: "person")
@@ -49,6 +50,12 @@ struct ContentView: View {
                     viewModel.hideMode.toggle()
                 } label: {
                     Image(systemName: "eye.slash.fill")
+                }
+                
+                Button {
+                    viewModel.sortButtonTapped()
+                } label: {
+                    Image(systemName: viewModel.sortAscending ? "arrow.down" : "arrow.up")
                 }
             }
         }

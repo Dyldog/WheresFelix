@@ -32,10 +32,12 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     
     private var genres: [Genre] = []
     private var selectedGenres: [Int] = []
-    private var movieNotes: [Note] = []
+    private var movieNotes: [MovieNote] = []
     
     @Published var peopleRows: [PersonCellModel] = []
     @Published var movieRows: [MovieCellModel] = []
+    @Published var noterows: [NotePersonModel] = []
+    
     @Published var filterViewModel: FilterViewModel?
     @Published var detailViewModel: MovieDetailViewModel?
     @Published var searchViewModel: SearchViewModel?
@@ -46,6 +48,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     
     @Published var hideMode: Bool = false
     @Published var moviesToHide: [Int] = []
+    @Published var sortAscending: Bool = false
     
     init(database: Database) {
         self.database = database
@@ -59,6 +62,9 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
         
         if notes.hasSelectedDirectory {
             movieNotes = notes.movieNotes()
+            noterows = movieNotes.grouping(by: { $0.actors }).map { entry in
+                .init(name: entry.key, movies: entry.value.map { $0.title })
+            }
         }
         reloadCells()
     }
@@ -78,14 +84,18 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
         }
     }
     
+    private func visibleMovies() async -> [CreditedMovie] {
+        let noteMovieTitles = movieNotes.map { $0.title }
+        return await database.allCreditedMovies(excludingTitles: noteMovieTitles, includeHidden: false).filter { movie in
+            guard !selectedGenres.isEmpty else { return true }
+            return movie.genres.map { $0.id }.containsAll(in: selectedGenres)
+        }.sorted(by: \.people.count, ascending: sortAscending)
+    }
+    
     private func reloadCells() {
         Task { @MainActor in
             showLoading = true
-            let noteMovieTitles = movieNotes.map { $0.title }
-            self.movieRows = await database.allCreditedMovies(excludingTitles: noteMovieTitles, includeHidden: false).filter { movie in
-                guard !selectedGenres.isEmpty else { return true }
-                return movie.genres.map { $0.id }.containsAll(in: selectedGenres)
-            }.sorted(by: { $0.people.count > $1.people.count }).map { credit in
+            self.movieRows = await visibleMovies().map { credit in
                 .init(
                     id: credit.movie.id,
                     imageURL: credit.movie.imageURL,
@@ -189,7 +199,8 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     
     func hideMoviesTapped() {
         Task { @MainActor in
-            let movies = await database.allMovies().filter { moviesToHide.contains($0.id) }
+            let allMovies = await visibleMovies().map { MovieWithGenres(movie: $0.movie, genres: $0.genres) }
+            let movies = moviesToHide.isEmpty ? allMovies : allMovies.filter { moviesToHide.contains($0.id) }
             hideViewModel = .init(
                 movies: movies,
                 database: database,
@@ -203,6 +214,11 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
             reloadCells()
         }
     }
+    
+    func sortButtonTapped() {
+        sortAscending.toggle()
+        reloadCells()
+    }
 }
 
 // MARK: - Notes
@@ -211,5 +227,15 @@ extension ContentViewModel {
     func didSelectNotesFolder(_ url: URL) {
         notes.setDirectory(url)
         onAppear()
+    }
+}
+
+extension Sequence {
+    func grouping<T>(by grouper: (Element) -> [T]) -> [T: [Element]] {
+        return self.reduce(into: [:]) { partialResult, element in
+            grouper(element).forEach {
+                partialResult[$0, default: []].append(element)
+            }
+        }
     }
 }

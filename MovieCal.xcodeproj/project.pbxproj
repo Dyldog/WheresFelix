@@ -21,7 +21,7 @@
 		110F921329A0A56E00AD3DED /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 110F921229A0A56E00AD3DED /* Nuke */; };
 		110F921529A0A56E00AD3DED /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 110F921429A0A56E00AD3DED /* NukeUI */; };
 		110F921729A0AC8000AD3DED /* MoviesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F921629A0AC8000AD3DED /* MoviesView.swift */; };
-		110F921929A0AC8400AD3DED /* PeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F921829A0AC8400AD3DED /* PeopleView.swift */; };
+		110F921929A0AC8400AD3DED /* AddedPeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F921829A0AC8400AD3DED /* AddedPeopleView.swift */; };
 		110F921B29A0B0BE00AD3DED /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F921A29A0B0BE00AD3DED /* FilterView.swift */; };
 		110F921E29A1650600AD3DED /* FilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F921D29A1650600AD3DED /* FilterViewModel.swift */; };
 		110F922129A1654100AD3DED /* Blocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F922029A1654100AD3DED /* Blocks.swift */; };
@@ -52,6 +52,8 @@
 		110F925C29A2374200AD3DED /* TMDBMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F925B29A2374200AD3DED /* TMDBMovie.swift */; };
 		110F925E29A2435200AD3DED /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F925D29A2435200AD3DED /* DetailView.swift */; };
 		FC8838352AE391AD00AB8CC4 /* NotesClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8838342AE391AD00AB8CC4 /* NotesClient.swift */; };
+		FC8838372AE39B7C00AB8CC4 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8838362AE39B7C00AB8CC4 /* NotesView.swift */; };
+		FC8838392AE39F3000AB8CC4 /* PeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8838382AE39F3000AB8CC4 /* PeopleView.swift */; };
 		FC94A9DF2AE2436300E1A595 /* DylKit in Frameworks */ = {isa = PBXBuildFile; productRef = FC94A9DE2AE2436300E1A595 /* DylKit */; };
 		FC94A9E12AE257DD00E1A595 /* CreditedMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94A9E02AE257DD00E1A595 /* CreditedMovie.swift */; };
 		FC94A9E32AE2689C00E1A595 /* TMDBMovieCredits.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94A9E22AE2689C00E1A595 /* TMDBMovieCredits.swift */; };
@@ -93,7 +95,7 @@
 		110F920829A095F800AD3DED /* Thread+Closures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Thread+Closures.swift"; sourceTree = "<group>"; };
 		110F920C29A0973600AD3DED /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		110F921629A0AC8000AD3DED /* MoviesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesView.swift; sourceTree = "<group>"; };
-		110F921829A0AC8400AD3DED /* PeopleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleView.swift; sourceTree = "<group>"; };
+		110F921829A0AC8400AD3DED /* AddedPeopleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddedPeopleView.swift; sourceTree = "<group>"; };
 		110F921A29A0B0BE00AD3DED /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		110F921D29A1650600AD3DED /* FilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewModel.swift; sourceTree = "<group>"; };
 		110F922029A1654100AD3DED /* Blocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blocks.swift; sourceTree = "<group>"; };
@@ -122,6 +124,8 @@
 		110F925B29A2374200AD3DED /* TMDBMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBMovie.swift; sourceTree = "<group>"; };
 		110F925D29A2435200AD3DED /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		FC8838342AE391AD00AB8CC4 /* NotesClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesClient.swift; sourceTree = "<group>"; };
+		FC8838362AE39B7C00AB8CC4 /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
+		FC8838382AE39F3000AB8CC4 /* PeopleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleView.swift; sourceTree = "<group>"; };
 		FC94A9DC2AE2434B00E1A595 /* DylKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DylKit; path = ../DylKit; sourceTree = "<group>"; };
 		FC94A9E02AE257DD00E1A595 /* CreditedMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditedMovie.swift; sourceTree = "<group>"; };
 		FC94A9E22AE2689C00E1A595 /* TMDBMovieCredits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBMovieCredits.swift; sourceTree = "<group>"; };
@@ -241,7 +245,9 @@
 				110F91DB29A0846C00AD3DED /* ContentView.swift */,
 				110F920329A0847E00AD3DED /* ContentViewModel.swift */,
 				110F921629A0AC8000AD3DED /* MoviesView.swift */,
-				110F921829A0AC8400AD3DED /* PeopleView.swift */,
+				110F921829A0AC8400AD3DED /* AddedPeopleView.swift */,
+				FC8838382AE39F3000AB8CC4 /* PeopleView.swift */,
+				FC8838362AE39B7C00AB8CC4 /* NotesView.swift */,
 			);
 			path = MoviesList;
 			sourceTree = "<group>";
@@ -521,9 +527,11 @@
 				FC94A9E52AE276F500E1A595 /* DetailViewModel.swift in Sources */,
 				110F921E29A1650600AD3DED /* FilterViewModel.swift in Sources */,
 				110F91DA29A0846C00AD3DED /* MovieCalApp.swift in Sources */,
+				FC8838392AE39F3000AB8CC4 /* PeopleView.swift in Sources */,
 				FC8838352AE391AD00AB8CC4 /* NotesClient.swift in Sources */,
-				110F921929A0AC8400AD3DED /* PeopleView.swift in Sources */,
+				110F921929A0AC8400AD3DED /* AddedPeopleView.swift in Sources */,
 				110F921B29A0B0BE00AD3DED /* FilterView.swift in Sources */,
+				FC8838372AE39B7C00AB8CC4 /* NotesView.swift in Sources */,
 				FC94A9E32AE2689C00E1A595 /* TMDBMovieCredits.swift in Sources */,
 				FC94A9EB2AE2812100E1A595 /* HideView.swift in Sources */,
 				110F925C29A2374200AD3DED /* TMDBMovie.swift in Sources */,
