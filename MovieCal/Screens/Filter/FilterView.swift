@@ -15,11 +15,24 @@ struct FilterView: View {
         List {
             Section {
                 minimumActors
+                hideUnreleased
             }
             
             Section("Genre") {
                 genres
             }
+        }
+    }
+    
+    private var hideUnreleased: some View {
+        HStack {
+            Text("Hide unreleased")
+            Spacer()
+            Toggle("Hide unreleased", isOn: .init(get: {
+                viewModel.hideUnreleased
+            }, set: {
+                viewModel.didSetHideUnreleased($0)
+            })).labelsHidden()
         }
     }
     
@@ -37,7 +50,17 @@ struct FilterView: View {
         }
     }
     
+    @ViewBuilder
     private var genres: some View {
+        Picker("Genre Mode", selection: .init(get: {
+            viewModel.excludeGenres
+        }, set: {
+            viewModel.didSetExcludeGenres($0)
+        })) {
+            Text("Include").tag(false)
+            Text("Exclude").tag(true)
+        }
+        
         ForEach(viewModel.genres) { genre in
             Button {
                 viewModel.didSelect(genre)

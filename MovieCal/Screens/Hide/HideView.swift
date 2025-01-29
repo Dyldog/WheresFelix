@@ -111,53 +111,55 @@ struct HideMovieView: View {
     let columns = Array(repeating: GridItem(.flexible(), alignment: .top), count: 3)
     
     var body: some View {
-        HStack {
-            LazyImage(url: movie.imageURL)
-                .aspectRatio(1.0/1.5, contentMode: .fit)
-                .frame(height: 100)
-                .cornerRadius(10)
-            Text(movie.title)
-                .font(.caption).bold()
-        }
-        .padding()
-        
-        List {
-            LazyVGrid(columns: columns, spacing: 20) {
-                ForEach(people) { person in
-                    Button {
-                        selectedPeople.toggleMembership(of: person.id)
-                    } label: {
-                        ZStack {
-                            VStack(alignment: .center) {
-                                LazyImage(url: person.imageURL)
-                                    .aspectRatio(1.0/1.5, contentMode: .fit)
-                                    .cornerRadius(10)
-                                Text(person.name)
-                                    .font(.caption).bold()
-                            }
-                            
-                            if selectedPeople.contains(person.id) {
-                                Image(systemName: "checkmark")
-                                    .foregroundColor(.blue)
-                                    .imageScale(.large)
-                                    .font(.largeTitle.bold())
+        VStack {
+            HStack {
+                LazyImage(url: movie.imageURL)
+                    .aspectRatio(1.0/1.5, contentMode: .fit)
+                    .frame(height: 100)
+                    .cornerRadius(10)
+                Text(movie.title)
+                    .font(.caption).bold()
+            }
+            .padding()
+            
+            List {
+                LazyVGrid(columns: columns, spacing: 20) {
+                    ForEach(people) { person in
+                        Button {
+                            selectedPeople.toggleMembership(of: person.id)
+                        } label: {
+                            ZStack {
+                                VStack(alignment: .center) {
+                                    LazyImage(url: person.imageURL)
+                                        .aspectRatio(1.0/1.5, contentMode: .fit)
+                                        .cornerRadius(10)
+                                    Text(person.name)
+                                        .font(.caption).bold()
+                                }
                                 
+                                if selectedPeople.contains(person.id) {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.blue)
+                                        .imageScale(.large)
+                                        .font(.largeTitle.bold())
+                                    
+                                }
                             }
                         }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
+                .padding(.vertical)
             }
-            .padding(.vertical)
+            
+            HStack {
+                bottomButton(title: selectedPeople.isEmpty ? "Skip" : "Don't Hide", color: .red, hide: false)
+                    .buttonStyle(.bordered)
+                bottomButton(title: selectedPeople.isEmpty ? "Hide" : "Add & Hide", color: .blue, hide: true)
+                    .buttonStyle(.borderedProminent)
+            }
+            .padding()
         }
-        
-        HStack {
-            bottomButton(title: selectedPeople.isEmpty ? "Skip" : "Don't Hide", color: .red, hide: false)
-                .buttonStyle(.bordered)
-            bottomButton(title: selectedPeople.isEmpty ? "Hide" : "Add & Hide", color: .blue, hide: true)
-                .buttonStyle(.borderedProminent)
-        }
-        .padding()
     }
     
     private func bottomButton(title: String, color: Color, hide: Bool) -> some View {

@@ -8,23 +8,26 @@
 import Foundation
 
 protocol FilterViewModelDelegate {
-    func didUpdateMinimumActors(_ newCount: Int)
-    func didUpdateSelectedGenres(_ ids: [Int])
+    func didUpdateFilter(_ model: FilterViewModel)
 }
 
 class FilterViewModel: ObservableObject, Identifiable {
     static let lowestMinimumActorCount = 1
     
     let id: UUID = .init()
-    @Published var minimumActors: Int
-    var genres: [Genre]
+    @Published private(set) var minimumActors: Int
+    @Published private(set) var hideUnreleased: Bool
+    private(set) var genres: [Genre]
+    @Published private(set)var excludeGenres: Bool
     var delegate: FilterViewModelDelegate
-    @Published private var selectedIDs: [Int]
+    @Published private(set) var selectedIDs: [Int]
     
-    init(minimumActors: Int, genres: [Genre], selectedIDs: [Int], delegate: FilterViewModelDelegate) {
+    init(minimumActors: Int, hideUnreleased: Bool, genres: [Genre], selectedIDs: [Int], excludeGenres: Bool, delegate: FilterViewModelDelegate) {
         self.genres = genres.sorted(by: { $0.name < $1.name })
         self.selectedIDs = selectedIDs
+        self.excludeGenres = excludeGenres
         self.minimumActors = max(minimumActors, Self.lowestMinimumActorCount)
+        self.hideUnreleased = hideUnreleased
         self.delegate = delegate
     }
     
@@ -39,7 +42,7 @@ class FilterViewModel: ObservableObject, Identifiable {
             selectedIDs.append(genre.id)
         }
         
-        delegate.didUpdateSelectedGenres(selectedIDs)
+        delegate.didUpdateFilter(self)
     }
     
     var minimumActorsTitle: String {
@@ -49,11 +52,21 @@ class FilterViewModel: ObservableObject, Identifiable {
     
     func didIncreaseMinimumActors() {
         minimumActors = minimumActors + 1
-        delegate.didUpdateMinimumActors(minimumActors)
+        delegate.didUpdateFilter(self)
     }
     
     func didDecreaseMinimumActors() {
         minimumActors = max(minimumActors - 1, Self.lowestMinimumActorCount)
-        delegate.didUpdateMinimumActors(minimumActors)
+        delegate.didUpdateFilter(self)
+    }
+    
+    func didSetHideUnreleased(_ newValue: Bool) {
+        hideUnreleased = newValue
+        delegate.didUpdateFilter(self)
+    }
+    
+    func didSetExcludeGenres(_ newValue: Bool) {
+        excludeGenres = newValue
+        delegate.didUpdateFilter(self)
     }
 }

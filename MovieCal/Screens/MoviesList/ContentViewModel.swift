@@ -52,6 +52,8 @@ class ContentViewModel: ObservableObject {
     @Published var moviesToHide: [Int] = []
     @Published var sortOrder: SortOrder = .releaseDate
     @Published var sortAscending: Bool = false
+    @Published var hideUnreleased: Bool = true
+    @Published var excludeSelectedGenres: Bool = false
     
     init(database: Database) {
         self.database = database
@@ -59,6 +61,8 @@ class ContentViewModel: ObservableObject {
     }
     
     func onAppear() {
+        showLoading = true
+        
         if genres.isEmpty {
             getGenres()
         }
@@ -91,9 +95,17 @@ class ContentViewModel: ObservableObject {
         let noteMovieTitles = movieNotes.map { $0.title }
         return await database.allCreditedMovies(excludingTitles: noteMovieTitles, includeHidden: false).filter { movie in
             guard !selectedGenres.isEmpty else { return true }
-            return movie.genres.map { $0.id }.containsAll(in: selectedGenres)
+            
+            if excludeSelectedGenres {
+                return movie.genres.map { $0.id }.containsAny(selectedGenres) == false
+            } else {
+                return movie.genres.map { $0.id }.containsAll(in: selectedGenres)
+            }
         }
-        .filter { $0.people.count >= minimumPeople }
+        .filter {
+            $0.people.count >= minimumPeople &&
+            (hideUnreleased ? ($0.movie.releaseDate < .now) : true)
+        }
         .sorted(in: sortOrder, ascending: sortAscending)
     }
     
@@ -142,8 +154,10 @@ class ContentViewModel: ObservableObject {
             let genres = await database.allGenres()
             filterViewModel = .init(
                 minimumActors: minimumPeople, 
+                hideUnreleased: hideUnreleased,
                 genres: genres,
-                selectedIDs: selectedGenres,
+                selectedIDs: selectedGenres, 
+                excludeGenres: excludeSelectedGenres,
                 delegate: self
             )
             self.showLoading = false
@@ -269,16 +283,14 @@ extension Array where Element == CreditedMovie {
 // MARK: - Filtering
 
 extension ContentViewModel: FilterViewModelDelegate {
-    func didUpdateMinimumActors(_ newCount: Int) {
+    func didUpdateFilter(_ model: FilterViewModel) {
         showLoading = true
-        minimumPeople = newCount
-        reloadCells()
-        showLoading = false
-    }
-    
-    func didUpdateSelectedGenres(_ ids: [Int]) {
-        showLoading = true
-        selectedGenres = ids
+        
+        minimumPeople = model.minimumActors
+        selectedGenres = model.selectedIDs
+        hideUnreleased = model.hideUnreleased
+        excludeSelectedGenres = model.excludeGenres
+        
         reloadCells()
         showLoading = false
     }
