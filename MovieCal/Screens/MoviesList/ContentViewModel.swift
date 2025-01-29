@@ -25,11 +25,12 @@ struct PersonCellModel: Identifiable {
     let title: String
 }
 
-class ContentViewModel: ObservableObject, FilterViewModelDelegate {
+class ContentViewModel: ObservableObject {
     let client = MovieClient.shared
     private let database: Database
     private let notes: NotesClient = .shared
     
+    private var minimumPeople = FilterViewModel.lowestMinimumActorCount
     private var genres: [Genre] = []
     private var selectedGenres: [Int] = []
     private var movieNotes: [MovieNote] = []
@@ -89,7 +90,9 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
         return await database.allCreditedMovies(excludingTitles: noteMovieTitles, includeHidden: false).filter { movie in
             guard !selectedGenres.isEmpty else { return true }
             return movie.genres.map { $0.id }.containsAll(in: selectedGenres)
-        }.sorted(by: \.people.count, ascending: sortAscending)
+        }
+        .filter { $0.people.count >= minimumPeople }
+        .sorted(by: \.people.count, ascending: sortAscending)
     }
     
     private func reloadCells() {
@@ -136,6 +139,7 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
             self.showLoading = true
             let genres = await database.allGenres()
             filterViewModel = .init(
+                minimumActors: minimumPeople, 
                 genres: genres,
                 selectedIDs: selectedGenres,
                 delegate: self
@@ -156,13 +160,6 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
         }
     }
 
-    func didUpdateSelectedGenres(_ ids: [Int]) {
-        showLoading = true
-        selectedGenres = ids
-        reloadCells()
-        showLoading = false
-    }
-    
     func deletePerson(_ person: PersonCellModel) {
         Task { @MainActor in
             showLoading = true
@@ -222,6 +219,22 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     func sortButtonTapped() {
         sortAscending.toggle()
         reloadCells()
+    }
+}
+
+extension ContentViewModel: FilterViewModelDelegate {
+    func didUpdateMinimumActors(_ newCount: Int) {
+        showLoading = true
+        minimumPeople = newCount
+        reloadCells()
+        showLoading = false
+    }
+    
+    func didUpdateSelectedGenres(_ ids: [Int]) {
+        showLoading = true
+        selectedGenres = ids
+        reloadCells()
+        showLoading = false
     }
 }
 
