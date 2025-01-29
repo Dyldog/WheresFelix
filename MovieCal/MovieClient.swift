@@ -12,6 +12,12 @@ import DylKit
 class MovieClient {
     static var shared: MovieClient = .init()
     
+    private let releaseDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
+    
     @discardableResult
     func searchPeople(for query: String, completion: @escaping APICompletion<[Person]>) -> URLSessionDataTask {
         TMDBAPI.searchPeople(query).retrieve(TMDBPagedResponse<TMDBMoviePerson>.self) { result in
@@ -23,15 +29,23 @@ class MovieClient {
     
     @discardableResult
     func getCredits(for person: Person, genres: [Genre], completion: @escaping APICompletion<[MovieWithGenres]>) -> URLSessionDataTask  {
-        TMDBAPI.getCredits(person.id).retrieve(TMDBPersonCredits.self) { result in
+        TMDBAPI.getCredits(person.id).retrieve(TMDBPersonCredits.self) { [weak self] result in
+            guard let self else { return }
+            
             completion(result.map { credits in
-                credits.movies.map {
-                    .init(
+                credits.movies.compactMap {
+                    guard let releaseDate = self.releaseDateFormatter.date(from: $0.releaseDate) else {
+                        print("ERROR: Movie \($0.title) (\($0.id)) has missing or invalid release date: \($0.releaseDate)")
+                        return nil
+                    }
+                    
+                    return .init(
                         movie: .init(
                             id: $0.id,
                             imageURL: $0.imageURL,
                             title: $0.title,
-                            overview: $0.overview
+                            overview: $0.overview, 
+                            releaseDate: releaseDate
                         ),
                         genres: $0.genreIDs.map { id in genres.first(where: { $0.id == id })! }
                     )

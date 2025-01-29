@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DylKit
 import Nuke
 import NukeUI
 
@@ -33,35 +34,15 @@ struct ContentView: View {
         }
         .navigationTitle("Where's Felix?")
         .toolbar {
-            HStack {
-                Button {
-                    viewModel.searchTapped()
-                } label: {
-                    Image(systemName: "plus")
-                }
-                
-                Button {
-                    viewModel.filterTapped()
-                } label: {
-                    Image(systemName: "camera.filters")
-                }
-                
-                Button {
-                    viewModel.hideMode.toggle()
-                } label: {
-                    Image(systemName: "eye.slash.fill")
-                }
-                
-                Button {
-                    viewModel.sortButtonTapped()
-                } label: {
-                    Image(systemName: viewModel.sortAscending ? "arrow.down" : "arrow.up")
-                }
-            }
+            navigationBarButtons
         }
         .sheet(item: $viewModel.searchViewModel) {
             SearchView(viewModel: $0)
         }
+        .confirmationDialog("Sort Order", isPresented: $viewModel.showSortOrderSheet, actions:  {
+            sortOrderButtons
+        }, message: { sortSheetMessage })
+        
         .if(viewModel.showNotes) {
             $0.fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.folder]) { result in
                 showFileImporter = false
@@ -76,6 +57,38 @@ struct ContentView: View {
         }
     }
     
+    private var navigationBarButtons: some View {
+        HStack {
+            Button(systemName: "plus") { viewModel.searchTapped() }
+            Button(systemName: "camera.filters") { viewModel.filterTapped() }
+            Button(systemName: "eye.slash.fill") { viewModel.hideMode.toggle() }
+            Button(systemName: viewModel.sortAscending ? "arrow.up" : "arrow.down") { viewModel.sortButtonTapped() }
+        }
+    }
+    
+    private var sortSheetMessage: some View {
+        Text("Sorting by \(viewModel.sortOrder.title.lowercased()) (\(viewModel.sortAscending ? "ascending" : "descending"))")
+    }
+    
+    @ViewBuilder
+    private var sortOrderButtons: some View {
+        Button(viewModel.sortAscending ? "Sort descending" : "Sort ascending") {
+            viewModel.didSelectSortOrderToggle()
+        }
+        
+        ForEach(ContentViewModel.SortOrder.allCases) { order in
+            if viewModel.sortOrder != order {
+                Button {
+                    viewModel.didSelectSortOrder(order)
+                } label: {
+                    HStack {
+                        Text("Sort by \(order.title.lowercased())")
+                    }
+                }
+            }
+        }
+    }
+    
     private var loadingIndicator: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
@@ -87,5 +100,13 @@ struct ContentView: View {
             ProgressView()
                 .progressViewStyle(.circular)
         }
+    }
+}
+
+extension Button {
+    init(systemName: String, action: @escaping () -> Void) where Label == SwiftUI.Image {
+        self.init(action: action, label: {
+            Image(systemName: systemName)
+        })
     }
 }

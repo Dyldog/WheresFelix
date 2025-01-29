@@ -26,6 +26,7 @@ extension Database {
                 t.column("title", .text).notNull()
                 t.column("imageURL", .text)
                 t.column("overview", .text)
+                t.column("releaseDate", .date)
             }
             
             try db.create(table: "genre", body: { t in

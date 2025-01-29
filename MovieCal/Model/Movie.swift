@@ -13,6 +13,7 @@ struct Movie: Hashable, Codable, TableRecord, EncodableRecord, PersistableRecord
     let imageURL: URL
     let title: String
     let overview: String
+    let releaseDate: Date
     
     private static let genreIDs = hasMany(MovieGenre.self)
     static let genres = hasMany(Genre.self, through: genreIDs, using: MovieGenre.genre)

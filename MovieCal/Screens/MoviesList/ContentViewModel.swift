@@ -43,12 +43,14 @@ class ContentViewModel: ObservableObject {
     @Published var detailViewModel: MovieDetailViewModel?
     @Published var searchViewModel: SearchViewModel?
     @Published var hideViewModel: HideViewModel?
+    @Published var showSortOrderSheet: Bool = false
     
     @Published var showLoading: Bool = false
     var showNotes: Bool { !notes.hasSelectedDirectory }
     
     @Published var hideMode: Bool = false
     @Published var moviesToHide: [Int] = []
+    @Published var sortOrder: SortOrder = .releaseDate
     @Published var sortAscending: Bool = false
     
     init(database: Database) {
@@ -92,7 +94,7 @@ class ContentViewModel: ObservableObject {
             return movie.genres.map { $0.id }.containsAll(in: selectedGenres)
         }
         .filter { $0.people.count >= minimumPeople }
-        .sorted(by: \.people.count, ascending: sortAscending)
+        .sorted(in: sortOrder, ascending: sortAscending)
     }
     
     private func reloadCells() {
@@ -217,10 +219,54 @@ class ContentViewModel: ObservableObject {
     }
     
     func sortButtonTapped() {
+        showSortOrderSheet = true
+    }
+    
+    func didSelectSortOrderToggle() {
         sortAscending.toggle()
         reloadCells()
     }
+    
+    func didSelectSortOrder(_ order: SortOrder) {
+        showLoading = true
+        sortOrder = order
+        reloadCells()
+        showLoading = false
+    }
 }
+
+// MARK: - Sorting
+
+extension ContentViewModel {
+    enum SortOrder: String, CaseIterable, Identifiable {
+        case peopleCount
+        case releaseDate
+        
+        var id: String { rawValue }
+        
+        var title: String {
+            switch self {
+            case .peopleCount: "Number of people"
+            case .releaseDate: "Release date"
+            }
+        }
+        
+        func orderedAscending(lhs: CreditedMovie, rhs: CreditedMovie) -> Bool {
+            switch self {
+            case .peopleCount: return lhs.people.count < rhs.people.count
+            case .releaseDate: return lhs.movie.releaseDate < rhs.movie.releaseDate
+            }
+        }
+    }
+}
+
+extension Array where Element == CreditedMovie {
+    func sorted(in order: ContentViewModel.SortOrder, ascending: Bool) -> Self {
+        sorted(by: { order.orderedAscending(lhs: $0, rhs: $1) }, ascending: ascending)
+    }
+}
+
+// MARK: - Filtering
 
 extension ContentViewModel: FilterViewModelDelegate {
     func didUpdateMinimumActors(_ newCount: Int) {
