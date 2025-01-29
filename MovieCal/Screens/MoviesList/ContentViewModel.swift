@@ -119,8 +119,8 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     }
     
     func didAddPerson(_ person: Person) {
+        self.showLoading = true
         client.getCredits(for: person, genres: genres) { result in
-            self.showLoading = true
             if case let .success(movies) = result {
                 Task { @MainActor in
                     await self.database.createPerson(person, with: movies)
@@ -176,7 +176,11 @@ class ContentViewModel: ObservableObject, FilterViewModelDelegate {
     
     func movieTapped(_ movie: MovieCellModel) {
         if hideMode {
-            moviesToHide.append(movie.id)
+            if moviesToHide.contains(movie.id) {
+                moviesToHide.removeAll { $0.id == movie.id }
+            } else {
+                moviesToHide.append(movie.id)
+            }
             self.reloadCells()
         } else {
             showMovieDetail(movie)
