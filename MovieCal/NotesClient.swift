@@ -30,6 +30,7 @@ class NotesClient {
     }
     
     let actorsRegex = try! NSRegularExpression(pattern: "\\[\\[([\\w ]+)\\]\\]", options: [])
+    
     func movieNotes() -> [MovieNote] {
         return notes.getNotes(in: "/")?.filter { $0.contents.contains("category:: [[Movies]]") }
             .map {

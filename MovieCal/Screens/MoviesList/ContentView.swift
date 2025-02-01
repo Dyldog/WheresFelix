@@ -103,10 +103,3 @@ struct ContentView: View {
     }
 }
 
-extension Button {
-    init(systemName: String, action: @escaping () -> Void) where Label == SwiftUI.Image {
-        self.init(action: action, label: {
-            Image(systemName: systemName)
-        })
-    }
-}

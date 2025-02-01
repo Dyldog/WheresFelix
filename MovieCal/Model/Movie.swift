@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import DylKit
 
 struct Movie: Hashable, Codable, TableRecord, EncodableRecord, PersistableRecord {
     let id: Int
@@ -23,4 +24,10 @@ struct Movie: Hashable, Codable, TableRecord, EncodableRecord, PersistableRecord
     static let people = hasMany(Person.self, through: peopleIDs, using: PersonMovie.person)
     
     static let hidden = hasOne(HiddenMovie.self)
+}
+
+extension Array where Element: TMDBPersonCreditType {
+    func credits(for movie: Movie) -> [String] {
+        credits(for: movie.id)
+    }
 }
