@@ -10,15 +10,6 @@ import SwiftUI
 import GRDB
 import DylKit
 
-struct MovieCellModel: Identifiable {
-    let id: Int
-    let imageURL: URL
-    let title: String
-    let credits: String
-    let numCredits: Int
-    let toBeHidden: Bool
-}
-
 struct PersonCellModel: Identifiable {
     let id: Int
     let imageURL: URL
@@ -35,9 +26,7 @@ class ContentViewModel: ObservableObject, NotesViewModel {
     private var selectedGenres: [Int] = []
     private var movieNotes: [MovieNote] = []
     
-//    @Published var peopleRows: [PersonCellModel] = []
     @Published var movieRows: [MovieCellModel] = []
-//    @Published var noterows: [NotePersonModel] = []
     
     @Published var filterViewModel: FilterViewModel?
     @Published var detailViewModel: MovieDetailViewModel?
@@ -67,11 +56,13 @@ class ContentViewModel: ObservableObject, NotesViewModel {
     func onAppear() {
         showLoading = true
         
-        if genres.isEmpty {
-            getGenres()
+        Task { @MainActor in
+            if genres.isEmpty {
+                getGenres()
+            }
+            
+            loadNotes()
         }
-
-        loadNotes()
     }
     
     func onLoadNotes() {
@@ -115,7 +106,10 @@ class ContentViewModel: ObservableObject, NotesViewModel {
     private func reloadCells() {
         Task { @MainActor in
             showLoading = true
-            self.movieRows = await visibleMovies().map { credit in
+        }
+        
+        Task {
+            let newRows: [MovieCellModel] = await visibleMovies().map { credit in
                 .init(
                     id: credit.movie.id,
                     imageURL: credit.movie.imageURL,
@@ -126,15 +120,10 @@ class ContentViewModel: ObservableObject, NotesViewModel {
                 )
             }
             
-//            self.peopleRows = await database.allPeople().map { person in
-//                .init(
-//                    id: person.id,
-//                    imageURL: person.imageURL ?? Image.placeholderURL,
-//                    title: person.name
-//                )
-//            }
-            
-            showLoading = false
+            Task { @MainActor in
+                movieRows = newRows
+                showLoading = false
+            }
         }
     }
     
@@ -286,15 +275,6 @@ extension ContentViewModel: FilterViewModelDelegate {
         
         reloadCells()
         showLoading = false
-    }
-}
-
-// MARK: - Notes
-
-extension ContentViewModel {
-    func didSelectNotesFolder(_ url: URL) {
-        notes.setDirectory(url)
-        onAppear()
     }
 }
 

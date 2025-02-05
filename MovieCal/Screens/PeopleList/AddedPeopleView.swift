@@ -23,19 +23,30 @@ struct AddedPeopleView: View {
                 loadingIndicator
             }
         }
+        .sheet(item: $viewModel.detailViewModel) { model in
+            NavigationView {
+                PersonDetailView(viewModel: model)
+            }
+        }
     }
     
     private var peopleList: some View {
         List {
             ForEach(viewModel.peopleRows) { person in
-                HStack {
-                    LazyImage(url: person.imageURL)
-                        .frame(width: 100, height: 150)
-                        .cornerRadius(10)
-                    VStack {
-                        Text(person.title)
+                Button {
+                    viewModel.didSelectPerson(person)
+                } label: {
+                    HStack {
+                        LazyImage(url: person.imageURL)
+                            .frame(width: 100, height: 150)
+                            .cornerRadius(10)
+                        VStack {
+                            Text(person.title)
+                        }
                     }
-                }.swipeActions {
+                }
+                .buttonStyle(.plain)
+                .swipeActions {
                     Button {
                         viewModel.deletePerson(person)
                     } label: {

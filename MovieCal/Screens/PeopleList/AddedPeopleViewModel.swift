@@ -15,6 +15,7 @@ class AddedPeopleViewModel: NSObject, ObservableObject {
     @Published private var unfilteredPeopleRows: [PersonCellModel] = []
     @Published var showLoading: Bool = false
     @Published var searchText: String = ""
+    @Published var detailViewModel: PersonDetailViewModel?
     
     var peopleRows: [PersonCellModel] {
         guard !searchText.isEmpty else { return unfilteredPeopleRows }
@@ -50,6 +51,10 @@ class AddedPeopleViewModel: NSObject, ObservableObject {
             }
             showLoading = false
         }
+    }
+    
+    func didSelectPerson(_ person: PersonCellModel) {
+        detailViewModel = .init(database: database, person: person)
     }
     
     func deletePerson(_ person: PersonCellModel) {

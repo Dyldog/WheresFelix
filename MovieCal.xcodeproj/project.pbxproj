@@ -49,6 +49,10 @@
 		FCC3FE9A2D52FFC7003027E5 /* PeopleNotesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FE992D52FFC7003027E5 /* PeopleNotesViewModel.swift */; };
 		FCC3FE9D2D5301B0003027E5 /* NotesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FE9C2D5301B0003027E5 /* NotesViewModel.swift */; };
 		FCC3FE9F2D530383003027E5 /* AddedPeopleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FE9E2D530383003027E5 /* AddedPeopleViewModel.swift */; };
+		FCC3FEA42D531072003027E5 /* PersonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEA32D531072003027E5 /* PersonDetailView.swift */; };
+		FCC3FEA62D53107A003027E5 /* PersonDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEA52D53107A003027E5 /* PersonDetailViewModel.swift */; };
+		FCC3FEA92D5310FC003027E5 /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEA82D5310FC003027E5 /* MovieCell.swift */; };
+		FCC3FEAB2D531196003027E5 /* MovieCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEAA2D531196003027E5 /* MovieCellModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +114,10 @@
 		FCC3FE992D52FFC7003027E5 /* PeopleNotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleNotesViewModel.swift; sourceTree = "<group>"; };
 		FCC3FE9C2D5301B0003027E5 /* NotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewModel.swift; sourceTree = "<group>"; };
 		FCC3FE9E2D530383003027E5 /* AddedPeopleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddedPeopleViewModel.swift; sourceTree = "<group>"; };
+		FCC3FEA32D531072003027E5 /* PersonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetailView.swift; sourceTree = "<group>"; };
+		FCC3FEA52D53107A003027E5 /* PersonDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetailViewModel.swift; sourceTree = "<group>"; };
+		FCC3FEA82D5310FC003027E5 /* MovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
+		FCC3FEAA2D531196003027E5 /* MovieCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCellModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,6 +269,8 @@
 		110F923E29A166FE00AD3DED /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				FCC3FEA72D5310F0003027E5 /* Components */,
+				FCC3FEA22D531066003027E5 /* Person Detail */,
 				FCC3FE9B2D5301A6003027E5 /* Notes */,
 				FCC3FE962D52FED3003027E5 /* PeopleList */,
 				FC94A9E92AE2811600E1A595 /* Hide */,
@@ -323,6 +333,24 @@
 				FCC3FE9C2D5301B0003027E5 /* NotesViewModel.swift */,
 			);
 			path = Notes;
+			sourceTree = "<group>";
+		};
+		FCC3FEA22D531066003027E5 /* Person Detail */ = {
+			isa = PBXGroup;
+			children = (
+				FCC3FEA32D531072003027E5 /* PersonDetailView.swift */,
+				FCC3FEA52D53107A003027E5 /* PersonDetailViewModel.swift */,
+			);
+			path = "Person Detail";
+			sourceTree = "<group>";
+		};
+		FCC3FEA72D5310F0003027E5 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FCC3FEA82D5310FC003027E5 /* MovieCell.swift */,
+				FCC3FEAA2D531196003027E5 /* MovieCellModel.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -475,6 +503,7 @@
 				110F925E29A2435200AD3DED /* DetailView.swift in Sources */,
 				110F91DC29A0846C00AD3DED /* ContentView.swift in Sources */,
 				FC94A9E52AE276F500E1A595 /* DetailViewModel.swift in Sources */,
+				FCC3FEAB2D531196003027E5 /* MovieCellModel.swift in Sources */,
 				110F921E29A1650600AD3DED /* FilterViewModel.swift in Sources */,
 				110F91DA29A0846C00AD3DED /* MovieCalApp.swift in Sources */,
 				FC8838392AE39F3000AB8CC4 /* PeopleView.swift in Sources */,
@@ -493,11 +522,14 @@
 				110F925129A171E600AD3DED /* MovieGenre.swift in Sources */,
 				FCC3FE9F2D530383003027E5 /* AddedPeopleViewModel.swift in Sources */,
 				110F924D29A1711D00AD3DED /* Movie.swift in Sources */,
+				FCC3FEA62D53107A003027E5 /* PersonDetailViewModel.swift in Sources */,
 				110F924229A1677B00AD3DED /* Data+String.swift in Sources */,
+				FCC3FEA92D5310FC003027E5 /* MovieCell.swift in Sources */,
 				110F924929A16BD300AD3DED /* Database.swift in Sources */,
 				FCC3FE9A2D52FFC7003027E5 /* PeopleNotesViewModel.swift in Sources */,
 				FCC3FE982D52FEE6003027E5 /* PeopleViewModel.swift in Sources */,
 				110F925529A17DCD00AD3DED /* PersonMovie.swift in Sources */,
+				FCC3FEA42D531072003027E5 /* PersonDetailView.swift in Sources */,
 				110F925329A178DA00AD3DED /* Person.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

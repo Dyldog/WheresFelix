@@ -24,19 +24,7 @@ struct MoviesView: View {
                         } label: {
                             VStack {
                                 ZStack {
-                                    LazyImage(url: movie.imageURL)
-                                        .aspectRatio(1.0/1.5, contentMode: .fit)
-                                        .cornerRadius(10)
-                                        .overlay(alignment: .bottomTrailing) {
-                                            Text("\(movie.numCredits)")
-                                                .padding(.horizontal, 6)
-                                                .aspectRatio(1, contentMode: .fit)
-                                                .background(Color.red)
-                                                .foregroundColor(.white)
-                                                .font(.body.bold())
-                                                .cornerRadius(10)
-                                                .padding(4)
-                                        }
+                                    MovieCell(movie: movie)
                                     
                                     if movie.toBeHidden {
                                         Image(systemName: "eye.slash.fill")
