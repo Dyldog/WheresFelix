@@ -16,7 +16,7 @@ struct PersonCellModel: Identifiable {
     let title: String
 }
 
-class ContentViewModel: ObservableObject, NotesViewModel {
+class ContentViewModel: ObservableObject, NotesViewModel, MovieSortingViewModel {
     let client = MovieClient.shared
     private let database: Database
     let notes: NotesClient = .shared
@@ -32,14 +32,13 @@ class ContentViewModel: ObservableObject, NotesViewModel {
     @Published var detailViewModel: MovieDetailViewModel?
     @Published var searchViewModel: SearchViewModel?
     @Published var hideViewModel: HideViewModel?
-    @Published var showSortOrderSheet: Bool = false
-    
+
     @Published var showLoading: Bool = false
     var showNotes: Bool { !notes.hasSelectedDirectory }
     
     @Published var hideMode: Bool = false
     @Published var moviesToHide: [Int] = []
-    @Published var sortOrder: SortOrder = .releaseDate
+    @Published var sortOrder: MovieSortOrder = .releaseDate
     @Published var sortAscending: Bool = false
     @Published var hideUnreleased: Bool = true
     @Published var excludeSelectedGenres: Bool = false
@@ -103,7 +102,7 @@ class ContentViewModel: ObservableObject, NotesViewModel {
         .sorted(in: sortOrder, ascending: sortAscending)
     }
     
-    private func reloadCells() {
+    func reloadCells() {
         Task { @MainActor in
             showLoading = true
         }
@@ -212,53 +211,6 @@ class ContentViewModel: ObservableObject, NotesViewModel {
             moviesToHide = []
             reloadCells()
         }
-    }
-    
-    func sortButtonTapped() {
-        showSortOrderSheet = true
-    }
-    
-    func didSelectSortOrderToggle() {
-        sortAscending.toggle()
-        reloadCells()
-    }
-    
-    func didSelectSortOrder(_ order: SortOrder) {
-        showLoading = true
-        sortOrder = order
-        reloadCells()
-        showLoading = false
-    }
-}
-
-// MARK: - Sorting
-
-extension ContentViewModel {
-    enum SortOrder: String, CaseIterable, Identifiable {
-        case peopleCount
-        case releaseDate
-        
-        var id: String { rawValue }
-        
-        var title: String {
-            switch self {
-            case .peopleCount: "Number of people"
-            case .releaseDate: "Release date"
-            }
-        }
-        
-        func orderedAscending(lhs: CreditedMovie, rhs: CreditedMovie) -> Bool {
-            switch self {
-            case .peopleCount: return lhs.people.count < rhs.people.count
-            case .releaseDate: return lhs.movie.releaseDate < rhs.movie.releaseDate
-            }
-        }
-    }
-}
-
-extension Array where Element == CreditedMovie {
-    func sorted(in order: ContentViewModel.SortOrder, ascending: Bool) -> Self {
-        sorted(by: { order.orderedAscending(lhs: $0, rhs: $1) }, ascending: ascending)
     }
 }
 

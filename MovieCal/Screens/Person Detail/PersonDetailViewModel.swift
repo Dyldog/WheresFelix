@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class PersonDetailViewModel: ObservableObject, NotesViewModel, Identifiable {
+class PersonDetailViewModel: ObservableObject, NotesViewModel, Identifiable, MovieSortingViewModel {
     private let database: Database
     let notes: NotesClient = .shared
     
@@ -17,6 +17,8 @@ class PersonDetailViewModel: ObservableObject, NotesViewModel, Identifiable {
     @Published var movieRows: [MovieCellModel] = []
     @Published var detailViewModel: MovieDetailViewModel?
     @Published var showLoading: Bool = false
+    @Published var sortOrder: MovieSortOrder = .releaseDate
+    @Published var sortAscending: Bool = false
     
     var id: Int { person.id }
     var title: String { person.title }
@@ -33,13 +35,23 @@ class PersonDetailViewModel: ObservableObject, NotesViewModel, Identifiable {
     }
 
     func onLoadNotes() {
-        movieNotes = notes.movieNotes()
-        reload()
+        Task { @MainActor in
+            showLoading = true
+        }
+        
+        Task {
+            movieNotes = notes.movieNotes()
+            reload()
+        }
     }
     
-    private func reload() {
+    func reload() {
         Task { @MainActor in
-            movieRows = await visibleMovies().map { credit in
+            showLoading = true
+        }
+        
+        Task {
+            let newRows: [MovieCellModel] = await visibleMovies().map { credit in
                 .init(
                     id: credit.movie.id,
                     imageURL: credit.movie.imageURL,
@@ -50,7 +62,10 @@ class PersonDetailViewModel: ObservableObject, NotesViewModel, Identifiable {
                 )
             }
             
-            showLoading = false
+            Task { @MainActor in
+                movieRows = newRows
+                showLoading = false
+            }
         }
     }
     
@@ -59,6 +74,7 @@ class PersonDetailViewModel: ObservableObject, NotesViewModel, Identifiable {
         return await database.allCreditedMovies(excludingTitles: noteMovieTitles, includeHidden: false).filter {
             $0.people.contains(where: { person in person.id == self.person.id })
         }
+        .sorted(in: sortOrder, ascending: sortAscending)
     }
     
     private func showMovieDetail(_ movie: MovieCellModel) {

@@ -31,6 +31,11 @@ struct PersonDetailView: View {
             }
         }
         .navigationTitle(viewModel.title)
+        .toolbar {
+            MovieSortButon(viewModel: viewModel, onUpdate: {
+                viewModel.reload()
+            })
+        }
         .notesPresenter(with: viewModel)
         .sheet(item: $viewModel.detailViewModel) {
             DetailView(viewModel: $0)

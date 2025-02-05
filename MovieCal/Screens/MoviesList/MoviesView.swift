@@ -19,25 +19,7 @@ struct MoviesView: View {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
                     ForEach(viewModel.movieRows) { movie in
-                        Button {
-                            viewModel.movieTapped(movie)
-                        } label: {
-                            VStack {
-                                ZStack {
-                                    MovieCell(movie: movie)
-                                    
-                                    if movie.toBeHidden {
-                                        Image(systemName: "eye.slash.fill")
-                                            .foregroundColor(.red)
-                                            .imageScale(.large)
-                                    }
-                                }
-                                Text(movie.title)
-                                    .fontWeight(.semibold)
-                                Spacer()
-                            }
-                        }
-                        .buttonStyle(PlainButtonStyle())
+                        cell(for: movie)
                     }
                 }
                 .padding(.horizontal)
@@ -65,5 +47,27 @@ struct MoviesView: View {
         }) {
             HideView(viewModel: $0)
         }
+    }
+    
+    private func cell(for movie: MovieCellModel) -> some View {
+        Button {
+            viewModel.movieTapped(movie)
+        } label: {
+            VStack {
+                ZStack {
+                    MovieCell(movie: movie)
+                    
+                    if movie.toBeHidden {
+                        Image(systemName: "eye.slash.fill")
+                            .foregroundColor(.red)
+                            .imageScale(.large)
+                    }
+                }
+                Text(movie.title)
+                    .fontWeight(.semibold)
+                Spacer()
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 }

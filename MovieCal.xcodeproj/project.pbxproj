@@ -53,6 +53,9 @@
 		FCC3FEA62D53107A003027E5 /* PersonDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEA52D53107A003027E5 /* PersonDetailViewModel.swift */; };
 		FCC3FEA92D5310FC003027E5 /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEA82D5310FC003027E5 /* MovieCell.swift */; };
 		FCC3FEAB2D531196003027E5 /* MovieCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEAA2D531196003027E5 /* MovieCellModel.swift */; };
+		FCC3FEAF2D531EDF003027E5 /* MovieSortingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEAE2D531EDF003027E5 /* MovieSortingViewModel.swift */; };
+		FCC3FEB12D531F41003027E5 /* MovieSortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEB02D531F41003027E5 /* MovieSortOrder.swift */; };
+		FCC3FEB32D531F85003027E5 /* View+SortButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEB22D531F85003027E5 /* View+SortButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +121,9 @@
 		FCC3FEA52D53107A003027E5 /* PersonDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetailViewModel.swift; sourceTree = "<group>"; };
 		FCC3FEA82D5310FC003027E5 /* MovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
 		FCC3FEAA2D531196003027E5 /* MovieCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCellModel.swift; sourceTree = "<group>"; };
+		FCC3FEAE2D531EDF003027E5 /* MovieSortingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSortingViewModel.swift; sourceTree = "<group>"; };
+		FCC3FEB02D531F41003027E5 /* MovieSortOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSortOrder.swift; sourceTree = "<group>"; };
+		FCC3FEB22D531F85003027E5 /* View+SortButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+SortButton.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -347,10 +353,29 @@
 		FCC3FEA72D5310F0003027E5 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				FCC3FEAD2D531ECE003027E5 /* Sorting */,
+				FCC3FEAC2D531EC2003027E5 /* MovieCell */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		FCC3FEAC2D531EC2003027E5 /* MovieCell */ = {
+			isa = PBXGroup;
+			children = (
 				FCC3FEA82D5310FC003027E5 /* MovieCell.swift */,
 				FCC3FEAA2D531196003027E5 /* MovieCellModel.swift */,
 			);
-			path = Components;
+			path = MovieCell;
+			sourceTree = "<group>";
+		};
+		FCC3FEAD2D531ECE003027E5 /* Sorting */ = {
+			isa = PBXGroup;
+			children = (
+				FCC3FEAE2D531EDF003027E5 /* MovieSortingViewModel.swift */,
+				FCC3FEB02D531F41003027E5 /* MovieSortOrder.swift */,
+				FCC3FEB22D531F85003027E5 /* View+SortButton.swift */,
+			);
+			path = Sorting;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -518,9 +543,11 @@
 				110F924B29A16DA100AD3DED /* Database+Migrator.swift in Sources */,
 				110F920429A0847E00AD3DED /* ContentViewModel.swift in Sources */,
 				110F921729A0AC8000AD3DED /* MoviesView.swift in Sources */,
+				FCC3FEAF2D531EDF003027E5 /* MovieSortingViewModel.swift in Sources */,
 				110F920D29A0973600AD3DED /* SearchView.swift in Sources */,
 				110F925129A171E600AD3DED /* MovieGenre.swift in Sources */,
 				FCC3FE9F2D530383003027E5 /* AddedPeopleViewModel.swift in Sources */,
+				FCC3FEB12D531F41003027E5 /* MovieSortOrder.swift in Sources */,
 				110F924D29A1711D00AD3DED /* Movie.swift in Sources */,
 				FCC3FEA62D53107A003027E5 /* PersonDetailViewModel.swift in Sources */,
 				110F924229A1677B00AD3DED /* Data+String.swift in Sources */,
@@ -530,6 +557,7 @@
 				FCC3FE982D52FEE6003027E5 /* PeopleViewModel.swift in Sources */,
 				110F925529A17DCD00AD3DED /* PersonMovie.swift in Sources */,
 				FCC3FEA42D531072003027E5 /* PersonDetailView.swift in Sources */,
+				FCC3FEB32D531F85003027E5 /* View+SortButton.swift in Sources */,
 				110F925329A178DA00AD3DED /* Person.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -38,9 +38,6 @@ struct ContentView: View {
         .sheet(item: $viewModel.searchViewModel) {
             SearchView(viewModel: $0)
         }
-        .confirmationDialog("Sort Order", isPresented: $viewModel.showSortOrderSheet, actions:  {
-            sortOrderButtons
-        }, message: { sortSheetMessage })
         .notesPresenter(with: viewModel)
     }
     
@@ -49,30 +46,9 @@ struct ContentView: View {
             Button(systemName: "plus") { viewModel.searchTapped() }
             Button(systemName: "camera.filters") { viewModel.filterTapped() }
             Button(systemName: "eye.slash.fill") { viewModel.hideMode.toggle() }
-            Button(systemName: viewModel.sortAscending ? "arrow.up" : "arrow.down") { viewModel.sortButtonTapped() }
-        }
-    }
-    
-    private var sortSheetMessage: some View {
-        Text("Sorting by \(viewModel.sortOrder.title.lowercased()) (\(viewModel.sortAscending ? "ascending" : "descending"))")
-    }
-    
-    @ViewBuilder
-    private var sortOrderButtons: some View {
-        Button(viewModel.sortAscending ? "Sort descending" : "Sort ascending") {
-            viewModel.didSelectSortOrderToggle()
-        }
-        
-        ForEach(ContentViewModel.SortOrder.allCases) { order in
-            if viewModel.sortOrder != order {
-                Button {
-                    viewModel.didSelectSortOrder(order)
-                } label: {
-                    HStack {
-                        Text("Sort by \(order.title.lowercased())")
-                    }
-                }
-            }
+            MovieSortButon(viewModel: viewModel, onUpdate: {
+                viewModel.reloadCells()
+            })
         }
     }
     
