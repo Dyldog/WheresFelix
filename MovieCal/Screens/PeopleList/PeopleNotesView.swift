@@ -15,9 +15,19 @@ struct NotePersonModel: Hashable {
 }
 struct PeopleNotesView: View {
     @StateObject var viewModel: PeopleNotesViewModel
-    @State var showFileImporter: Bool = false
     
     var body: some View {
+        ZStack {
+            content
+            
+            if viewModel.showLoading {
+                loadingIndicator
+            }
+        }
+        .notesPresenter(with: viewModel)
+    }
+    
+    private var content: some View {
         List {
             ForEach(viewModel.noterows) { person in
                 HStack {
@@ -31,6 +41,18 @@ struct PeopleNotesView: View {
                 }
             }
         }
-        .notesPresenter(with: viewModel)
+    }
+    
+    private var loadingIndicator: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(.white)
+                .frame(width: 80)
+                .aspectRatio(1, contentMode: .fit)
+                .opacity(0.9)
+            
+            ProgressView()
+                .progressViewStyle(.circular)
+        }
     }
 }
