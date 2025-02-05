@@ -56,6 +56,10 @@
 		FCC3FEAF2D531EDF003027E5 /* MovieSortingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEAE2D531EDF003027E5 /* MovieSortingViewModel.swift */; };
 		FCC3FEB12D531F41003027E5 /* MovieSortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEB02D531F41003027E5 /* MovieSortOrder.swift */; };
 		FCC3FEB32D531F85003027E5 /* View+SortButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEB22D531F85003027E5 /* View+SortButton.swift */; };
+		FCC3FEB52D53243F003027E5 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEB42D53243F003027E5 /* SearchViewModel.swift */; };
+		FCC3FEB72D53245C003027E5 /* SearchCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEB62D53245C003027E5 /* SearchCellModel.swift */; };
+		FCC3FEB92D5324F4003027E5 /* HideViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEB82D5324F4003027E5 /* HideViewModel.swift */; };
+		FCC3FEBB2D532524003027E5 /* HideMovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3FEBA2D532524003027E5 /* HideMovieView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +128,10 @@
 		FCC3FEAE2D531EDF003027E5 /* MovieSortingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSortingViewModel.swift; sourceTree = "<group>"; };
 		FCC3FEB02D531F41003027E5 /* MovieSortOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSortOrder.swift; sourceTree = "<group>"; };
 		FCC3FEB22D531F85003027E5 /* View+SortButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+SortButton.swift"; sourceTree = "<group>"; };
+		FCC3FEB42D53243F003027E5 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		FCC3FEB62D53245C003027E5 /* SearchCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCellModel.swift; sourceTree = "<group>"; };
+		FCC3FEB82D5324F4003027E5 /* HideViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideViewModel.swift; sourceTree = "<group>"; };
+		FCC3FEBA2D532524003027E5 /* HideMovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideMovieView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -243,6 +251,8 @@
 			isa = PBXGroup;
 			children = (
 				110F920C29A0973600AD3DED /* SearchView.swift */,
+				FCC3FEB42D53243F003027E5 /* SearchViewModel.swift */,
+				FCC3FEB62D53245C003027E5 /* SearchCellModel.swift */,
 			);
 			path = SearchPeople;
 			sourceTree = "<group>";
@@ -316,6 +326,8 @@
 			isa = PBXGroup;
 			children = (
 				FC94A9EA2AE2812100E1A595 /* HideView.swift */,
+				FCC3FEB82D5324F4003027E5 /* HideViewModel.swift */,
+				FCC3FEBA2D532524003027E5 /* HideMovieView.swift */,
 			);
 			path = Hide;
 			sourceTree = "<group>";
@@ -538,6 +550,7 @@
 				FC8838372AE39B7C00AB8CC4 /* PeopleNotesView.swift in Sources */,
 				FC94A9EB2AE2812100E1A595 /* HideView.swift in Sources */,
 				110F924F29A1714B00AD3DED /* Genre.swift in Sources */,
+				FCC3FEB72D53245C003027E5 /* SearchCellModel.swift in Sources */,
 				110F922129A1654100AD3DED /* Blocks.swift in Sources */,
 				110F924429A167AD00AD3DED /* String+Empty.swift in Sources */,
 				110F924B29A16DA100AD3DED /* Database+Migrator.swift in Sources */,
@@ -546,12 +559,15 @@
 				FCC3FEAF2D531EDF003027E5 /* MovieSortingViewModel.swift in Sources */,
 				110F920D29A0973600AD3DED /* SearchView.swift in Sources */,
 				110F925129A171E600AD3DED /* MovieGenre.swift in Sources */,
+				FCC3FEB52D53243F003027E5 /* SearchViewModel.swift in Sources */,
 				FCC3FE9F2D530383003027E5 /* AddedPeopleViewModel.swift in Sources */,
 				FCC3FEB12D531F41003027E5 /* MovieSortOrder.swift in Sources */,
 				110F924D29A1711D00AD3DED /* Movie.swift in Sources */,
 				FCC3FEA62D53107A003027E5 /* PersonDetailViewModel.swift in Sources */,
 				110F924229A1677B00AD3DED /* Data+String.swift in Sources */,
+				FCC3FEBB2D532524003027E5 /* HideMovieView.swift in Sources */,
 				FCC3FEA92D5310FC003027E5 /* MovieCell.swift in Sources */,
+				FCC3FEB92D5324F4003027E5 /* HideViewModel.swift in Sources */,
 				110F924929A16BD300AD3DED /* Database.swift in Sources */,
 				FCC3FE9A2D52FFC7003027E5 /* PeopleNotesViewModel.swift in Sources */,
 				FCC3FE982D52FEE6003027E5 /* PeopleViewModel.swift in Sources */,
