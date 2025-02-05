@@ -21,27 +21,30 @@ enum PeopleTab: CaseIterable {
 }
 
 struct PeopleView: View {
-    @ObservedObject var viewModel: ContentViewModel
+    @State var viewModel: PeopleViewModel
     @State var tab: PeopleTab = .added
     
     var body: some View {
         VStack {
-//            Picker("Tab", selection: $tab) {
-//                ForEach(PeopleTab.allCases) {
-//                    Text($0.title).tag($0)
-//                }
-//            }
-//            .pickerStyle(.segmented)
-//            .padding(.horizontal)
+            Picker("Tab", selection: $tab) {
+                ForEach(PeopleTab.allCases) {
+                    Text($0.title).tag($0)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
             
             currentView
         }
     }
     
+    @ViewBuilder
     private var currentView: some View {
         switch tab {
-        case .notes: return AnyView(NotesView(viewModel: viewModel))
-        case .added: return AnyView(AddedPeopleView(viewModel: viewModel))
+        case .notes:
+            PeopleNotesView(viewModel: viewModel.notesViewModel)
+        case .added:
+            AddedPeopleView(viewModel: viewModel.addedViewModel)
         }
     }
 }

@@ -25,19 +25,19 @@ struct PersonCellModel: Identifiable {
     let title: String
 }
 
-class ContentViewModel: ObservableObject {
+class ContentViewModel: ObservableObject, NotesViewModel {
     let client = MovieClient.shared
     private let database: Database
-    private let notes: NotesClient = .shared
+    let notes: NotesClient = .shared
     
     private var minimumPeople = FilterViewModel.lowestMinimumActorCount
     private var genres: [Genre] = []
     private var selectedGenres: [Int] = []
     private var movieNotes: [MovieNote] = []
     
-    @Published var peopleRows: [PersonCellModel] = []
+//    @Published var peopleRows: [PersonCellModel] = []
     @Published var movieRows: [MovieCellModel] = []
-    @Published var noterows: [NotePersonModel] = []
+//    @Published var noterows: [NotePersonModel] = []
     
     @Published var filterViewModel: FilterViewModel?
     @Published var detailViewModel: MovieDetailViewModel?
@@ -55,6 +55,10 @@ class ContentViewModel: ObservableObject {
     @Published var hideUnreleased: Bool = true
     @Published var excludeSelectedGenres: Bool = false
     
+    var peopleViewModel: PeopleViewModel {
+        .init(database: database)
+    }
+    
     init(database: Database) {
         self.database = database
         onAppear()
@@ -66,13 +70,12 @@ class ContentViewModel: ObservableObject {
         if genres.isEmpty {
             getGenres()
         }
-        
-        if notes.hasSelectedDirectory {
-            movieNotes = notes.movieNotes()
-            noterows = movieNotes.grouping(by: { $0.actors }).map { entry in
-                .init(name: entry.key, movies: entry.value.map { $0.title })
-            }
-        }
+
+        loadNotes()
+    }
+    
+    func onLoadNotes() {
+        movieNotes = notes.movieNotes()
         reloadCells()
     }
     
@@ -123,13 +126,13 @@ class ContentViewModel: ObservableObject {
                 )
             }
             
-            self.peopleRows = await database.allPeople().map { person in
-                .init(
-                    id: person.id,
-                    imageURL: person.imageURL ?? Image.placeholderURL,
-                    title: person.name
-                )
-            }
+//            self.peopleRows = await database.allPeople().map { person in
+//                .init(
+//                    id: person.id,
+//                    imageURL: person.imageURL ?? Image.placeholderURL,
+//                    title: person.name
+//                )
+//            }
             
             showLoading = false
         }
@@ -176,17 +179,6 @@ class ContentViewModel: ObservableObject {
         }
     }
 
-    func deletePerson(_ person: PersonCellModel) {
-        Task { @MainActor in
-            showLoading = true
-            let people = await database.allPeople()
-            guard let person = people.first(where: { $0.id == person.id }) else { return }
-            await database.deletePerson(person)
-            reloadCells()
-            showLoading = false
-        }
-    }
-    
     func movieTapped(_ movie: MovieCellModel) {
         if hideMode {
             if moviesToHide.contains(movie.id) {
@@ -223,6 +215,7 @@ class ContentViewModel: ObservableObject {
                 database: database,
                 onUpdate: { },
                 dismis: {
+                    self.reloadCells()
                     self.hideViewModel = nil
                 }
             )

@@ -13,8 +13,9 @@ struct NotePersonModel: Hashable {
     let name: String
     let movies: [String]
 }
-struct NotesView: View {
-    @ObservedObject var viewModel: ContentViewModel
+struct PeopleNotesView: View {
+    @StateObject var viewModel: PeopleNotesViewModel
+    @State var showFileImporter: Bool = false
     
     var body: some View {
         List {
@@ -30,5 +31,6 @@ struct NotesView: View {
                 }
             }
         }
+        .notesPresenter(with: viewModel)
     }
 }

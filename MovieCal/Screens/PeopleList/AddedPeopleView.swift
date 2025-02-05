@@ -10,8 +10,22 @@ import SwiftUI
 import NukeUI
 
 struct AddedPeopleView: View {
-    @ObservedObject var viewModel: ContentViewModel
+    @StateObject var viewModel: AddedPeopleViewModel
     var body: some View {
+        ZStack {
+            VStack(spacing: 0) {
+                TextField("Search", text: $viewModel.searchText)
+                    .padding()
+                peopleList
+            }
+            
+            if viewModel.showLoading {
+                loadingIndicator
+            }
+        }
+    }
+    
+    private var peopleList: some View {
         List {
             ForEach(viewModel.peopleRows) { person in
                 HStack {
@@ -30,6 +44,19 @@ struct AddedPeopleView: View {
                     .tint(.red)
                 }
             }
+        }
+    }
+    
+    private var loadingIndicator: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(.white)
+                .frame(width: 80)
+                .aspectRatio(1, contentMode: .fit)
+                .opacity(0.9)
+            
+            ProgressView()
+                .progressViewStyle(.circular)
         }
     }
 }
