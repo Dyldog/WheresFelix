@@ -30,6 +30,8 @@ class MovieDetailViewModel: ObservableObject, Identifiable {
     
     private var genres: [Genre] = []
     
+    @Published var personDetailViewModel: PersonDetailViewModel?
+    
     init(movie: MovieWithGenres, database: Database, onUpdate: @escaping () -> Void, dismiss: @escaping () -> Void) {
         self.movie = movie
         self.database = database
@@ -51,6 +53,13 @@ class MovieDetailViewModel: ObservableObject, Identifiable {
                 }
             }
         }
+    }
+    
+    func knownPersonTapped(_ person: Person) {
+        personDetailViewModel = .init(
+            database: database,
+            person: .init(id: person.id, imageURL: person.imageURL ?? Image.placeholderURL, title: person.name)
+        )
     }
     
     func personTapped(_ person: Person) {

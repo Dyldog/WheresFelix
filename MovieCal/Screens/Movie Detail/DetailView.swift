@@ -24,14 +24,18 @@ struct DetailView: View {
                 Section("Actors you've added") {
                     LazyVGrid(columns: columns, spacing: 20) {
                         ForEach(viewModel.knownActors) { person in
-                            VStack(alignment: .center) {
-                                LazyImage(url: person.imageURL)
-                                    .aspectRatio(1.0/1.5, contentMode: .fit)
-                                    .cornerRadius(10)
-                                Text(person.name)
-                                    .font(.caption).bold()
+                            Button {
+                                viewModel.knownPersonTapped(person)
+                            } label: {
+                                VStack(alignment: .center) {
+                                    LazyImage(url: person.imageURL)
+                                        .aspectRatio(1.0/1.5, contentMode: .fit)
+                                        .cornerRadius(10)
+                                    Text(person.name)
+                                        .font(.caption).bold()
+                                }
                             }
-                            
+                            .buttonStyle(.plain)
                         }
                     }
                     .padding(.vertical)
@@ -63,6 +67,11 @@ struct DetailView: View {
                 }
             }
             .navigationTitle(viewModel.title)
+        }
+        .sheet(item: $viewModel.personDetailViewModel) { model in
+            NavigationView {
+                PersonDetailView(viewModel: model)
+            }
         }
     }
 }
