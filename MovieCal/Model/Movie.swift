@@ -22,7 +22,7 @@ struct Movie: Hashable, Codable, TableRecord, EncodableRecord, PersistableRecord
     var genres: QueryInterfaceRequest<Genre> { request(for: Movie.genres) }
     
     private static let peopleIDs = hasMany(PersonMovie.self)
-    static let people = hasMany(Person.self, through: peopleIDs, using: PersonMovie.person)
+    static let people = hasMany(Person.self, through: peopleIDs, using: PersonMovie.person).distinct()
     
     static let hidden = hasOne(HiddenMovie.self)
 }

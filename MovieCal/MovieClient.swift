@@ -68,18 +68,22 @@ class MovieClient {
     @discardableResult
     func getCredits(for movie: Movie, completion: @escaping APICompletion<[Person]>) -> Task<Void, Never> {
         TMDBJSONAPI.getMovieCredits.retrieve(.init(movieID: movie.id)) { result in
-            completion(result.map { credits in
-                let people: [TMDBMovieCreditType] = (credits.cast + credits.crew).sorted(by: {
-                    $0.popularity > $1.popularity
-                })
-                
-                return people.map {
-                    Person(id: $0.id, name: $0.name, imageURL: $0.imageURL)
+            completion(
+                result.map { credits in
+                    let people: [TMDBMovieCreditType] = (credits.cast + credits.crew).sorted(by: {
+                        $0.popularity > $1.popularity
+                    })
+                    
+                    let uniquePeople = people.map {
+                        Person(id: $0.id, name: $0.name, imageURL: $0.imageURL)
+                    }
+                    .unique
+                    
+                    return uniquePeople
+                }.mapError {
+                    .unknown($0)
                 }
-                .unique
-            }.mapError {
-                .unknown($0)
-            })
+            )
         }
     }
     

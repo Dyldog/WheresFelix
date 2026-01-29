@@ -101,7 +101,7 @@ class Database {
     
     func createPerson(_ person: Person, with movies: [MovieWithGenres]) async {
         try! await dbWriter.write { db in
-            try person.insert(db)
+            try person.insert(db, onConflict: .ignore)
             try movies.forEach { movie in
                 try movie.movie.insert(db, onConflict: .ignore)
                 try movie.genres.forEach { genre in

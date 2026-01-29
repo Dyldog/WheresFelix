@@ -8,7 +8,7 @@
 import Foundation
 import GRDB
 
-struct Person: Codable, FetchableRecord, PersistableRecord, TableRecord, Identifiable, Hashable, Equatable {
+struct Person: Codable, FetchableRecord, PersistableRecord, TableRecord, Identifiable, Equatable {
     let id: Int
     let name: String
     let imageURL: URL?
