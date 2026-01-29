@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,7 +26,6 @@
 		110F922129A1654100AD3DED /* Blocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F922029A1654100AD3DED /* Blocks.swift */; };
 		110F924229A1677B00AD3DED /* Data+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F924129A1677B00AD3DED /* Data+String.swift */; };
 		110F924429A167AD00AD3DED /* String+Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F924329A167AD00AD3DED /* String+Empty.swift */; };
-		110F924729A16B9B00AD3DED /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 110F924629A16B9B00AD3DED /* GRDB */; };
 		110F924929A16BD300AD3DED /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F924829A16BD300AD3DED /* Database.swift */; };
 		110F924B29A16DA100AD3DED /* Database+Migrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F924A29A16DA100AD3DED /* Database+Migrator.swift */; };
 		110F924D29A1711D00AD3DED /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F924C29A1711D00AD3DED /* Movie.swift */; };
@@ -36,6 +35,15 @@
 		110F925529A17DCD00AD3DED /* PersonMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F925429A17DCD00AD3DED /* PersonMovie.swift */; };
 		110F925A29A1A93B00AD3DED /* CollectionConcurrencyKit in Frameworks */ = {isa = PBXBuildFile; productRef = 110F925929A1A93B00AD3DED /* CollectionConcurrencyKit */; };
 		110F925E29A2435200AD3DED /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110F925D29A2435200AD3DED /* DetailView.swift */; };
+		FC522B3A2F2AFDAA00F39CCA /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = FC522B392F2AFDAA00F39CCA /* GRDB */; };
+		FC522B3C2F2AFDF800F39CCA /* DylKitNotes in Frameworks */ = {isa = PBXBuildFile; productRef = FC522B3B2F2AFDF800F39CCA /* DylKitNotes */; };
+		FC522B3E2F2AFE3700F39CCA /* DylKitAPI in Frameworks */ = {isa = PBXBuildFile; productRef = FC522B3D2F2AFE3700F39CCA /* DylKitAPI */; };
+		FC522B402F2AFE7700F39CCA /* DylKit in Frameworks */ = {isa = PBXBuildFile; productRef = FC522B3F2F2AFE7700F39CCA /* DylKit */; };
+		FC522B422F2AFE7700F39CCA /* DylKitAPI in Frameworks */ = {isa = PBXBuildFile; productRef = FC522B412F2AFE7700F39CCA /* DylKitAPI */; };
+		FC522B442F2AFE7700F39CCA /* DylKitNotes in Frameworks */ = {isa = PBXBuildFile; productRef = FC522B432F2AFE7700F39CCA /* DylKitNotes */; };
+		FC522B472F2AFEC900F39CCA /* DylKit in Frameworks */ = {isa = PBXBuildFile; productRef = FC522B462F2AFEC900F39CCA /* DylKit */; };
+		FC522B492F2AFEC900F39CCA /* DylKitAPI in Frameworks */ = {isa = PBXBuildFile; productRef = FC522B482F2AFEC900F39CCA /* DylKitAPI */; };
+		FC522B4B2F2AFEC900F39CCA /* DylKitNotes in Frameworks */ = {isa = PBXBuildFile; productRef = FC522B4A2F2AFEC900F39CCA /* DylKitNotes */; };
 		FC8838352AE391AD00AB8CC4 /* NotesClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8838342AE391AD00AB8CC4 /* NotesClient.swift */; };
 		FC8838372AE39B7C00AB8CC4 /* PeopleNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8838362AE39B7C00AB8CC4 /* PeopleNotesView.swift */; };
 		FC8838392AE39F3000AB8CC4 /* PeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8838382AE39F3000AB8CC4 /* PeopleView.swift */; };
@@ -111,7 +119,6 @@
 		FC8838342AE391AD00AB8CC4 /* NotesClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesClient.swift; sourceTree = "<group>"; };
 		FC8838362AE39B7C00AB8CC4 /* PeopleNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleNotesView.swift; sourceTree = "<group>"; };
 		FC8838382AE39F3000AB8CC4 /* PeopleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleView.swift; sourceTree = "<group>"; };
-		FC94A9DC2AE2434B00E1A595 /* DylKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DylKit; path = ../DylKit; sourceTree = "<group>"; };
 		FC94A9E02AE257DD00E1A595 /* CreditedMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditedMovie.swift; sourceTree = "<group>"; };
 		FC94A9E42AE276F500E1A595 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		FC94A9E72AE2780B00E1A595 /* HiddenMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenMovie.swift; sourceTree = "<group>"; };
@@ -140,10 +147,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC94A9DF2AE2436300E1A595 /* DylKit in Frameworks */,
-				110F924729A16B9B00AD3DED /* GRDB in Frameworks */,
+				FC522B3A2F2AFDAA00F39CCA /* GRDB in Frameworks */,
+				FC522B3E2F2AFE3700F39CCA /* DylKitAPI in Frameworks */,
+				FC522B4B2F2AFEC900F39CCA /* DylKitNotes in Frameworks */,
 				110F921329A0A56E00AD3DED /* Nuke in Frameworks */,
+				FC522B472F2AFEC900F39CCA /* DylKit in Frameworks */,
+				FC522B3C2F2AFDF800F39CCA /* DylKitNotes in Frameworks */,
+				FC522B422F2AFE7700F39CCA /* DylKitAPI in Frameworks */,
 				110F921529A0A56E00AD3DED /* NukeUI in Frameworks */,
+				FC522B492F2AFEC900F39CCA /* DylKitAPI in Frameworks */,
+				FC522B442F2AFE7700F39CCA /* DylKitNotes in Frameworks */,
 				110F925A29A1A93B00AD3DED /* CollectionConcurrencyKit in Frameworks */,
+				FC522B402F2AFE7700F39CCA /* DylKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,7 +182,6 @@
 		110F91CD29A0846C00AD3DED = {
 			isa = PBXGroup;
 			children = (
-				FC94A9DB2AE2434B00E1A595 /* Packages */,
 				110F91D829A0846C00AD3DED /* MovieCal */,
 				110F91E929A0846E00AD3DED /* MovieCalTests */,
 				110F91F329A0846E00AD3DED /* MovieCalUITests */,
@@ -298,14 +312,6 @@
 			path = Screens;
 			sourceTree = "<group>";
 		};
-		FC94A9DB2AE2434B00E1A595 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				FC94A9DC2AE2434B00E1A595 /* DylKit */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		FC94A9DD2AE2436300E1A595 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -409,9 +415,17 @@
 			packageProductDependencies = (
 				110F921229A0A56E00AD3DED /* Nuke */,
 				110F921429A0A56E00AD3DED /* NukeUI */,
-				110F924629A16B9B00AD3DED /* GRDB */,
 				110F925929A1A93B00AD3DED /* CollectionConcurrencyKit */,
 				FC94A9DE2AE2436300E1A595 /* DylKit */,
+				FC522B392F2AFDAA00F39CCA /* GRDB */,
+				FC522B3B2F2AFDF800F39CCA /* DylKitNotes */,
+				FC522B3D2F2AFE3700F39CCA /* DylKitAPI */,
+				FC522B3F2F2AFE7700F39CCA /* DylKit */,
+				FC522B412F2AFE7700F39CCA /* DylKitAPI */,
+				FC522B432F2AFE7700F39CCA /* DylKitNotes */,
+				FC522B462F2AFEC900F39CCA /* DylKit */,
+				FC522B482F2AFEC900F39CCA /* DylKitAPI */,
+				FC522B4A2F2AFEC900F39CCA /* DylKitNotes */,
 			);
 			productName = MovieCal;
 			productReference = 110F91D629A0846C00AD3DED /* MovieCal.app */;
@@ -487,8 +501,9 @@
 			mainGroup = 110F91CD29A0846C00AD3DED;
 			packageReferences = (
 				110F921129A0A56E00AD3DED /* XCRemoteSwiftPackageReference "Nuke" */,
-				110F924529A16B9B00AD3DED /* XCRemoteSwiftPackageReference "GRDB" */,
 				110F925829A1A93B00AD3DED /* XCRemoteSwiftPackageReference "collectionconcurrencykit" */,
+				FC522B382F2AFDAA00F39CCA /* XCRemoteSwiftPackageReference "GRDB" */,
+				FC522B452F2AFEC900F39CCA /* XCLocalSwiftPackageReference "../DylKit" */,
 			);
 			productRefGroup = 110F91D729A0846C00AD3DED /* Products */;
 			projectDirPath = "";
@@ -904,21 +919,20 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		FC522B452F2AFEC900F39CCA /* XCLocalSwiftPackageReference "../DylKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../DylKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		110F921129A0A56E00AD3DED /* XCRemoteSwiftPackageReference "Nuke" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kean/Nuke";
 			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-		110F924529A16B9B00AD3DED /* XCRemoteSwiftPackageReference "GRDB" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/groue/GRDB.swift";
-			requirement = {
-				branch = master;
-				kind = branch;
+				kind = exactVersion;
+				version = 12.8.0;
 			};
 		};
 		110F925829A1A93B00AD3DED /* XCRemoteSwiftPackageReference "collectionconcurrencykit" */ = {
@@ -927,6 +941,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.2.0;
+			};
+		};
+		FC522B382F2AFDAA00F39CCA /* XCRemoteSwiftPackageReference "GRDB" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift";
+			requirement = {
+				kind = exactVersion;
+				version = 7.9.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -942,15 +964,50 @@
 			package = 110F921129A0A56E00AD3DED /* XCRemoteSwiftPackageReference "Nuke" */;
 			productName = NukeUI;
 		};
-		110F924629A16B9B00AD3DED /* GRDB */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 110F924529A16B9B00AD3DED /* XCRemoteSwiftPackageReference "GRDB" */;
-			productName = GRDB;
-		};
 		110F925929A1A93B00AD3DED /* CollectionConcurrencyKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 110F925829A1A93B00AD3DED /* XCRemoteSwiftPackageReference "collectionconcurrencykit" */;
 			productName = CollectionConcurrencyKit;
+		};
+		FC522B392F2AFDAA00F39CCA /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC522B382F2AFDAA00F39CCA /* XCRemoteSwiftPackageReference "GRDB" */;
+			productName = GRDB;
+		};
+		FC522B3B2F2AFDF800F39CCA /* DylKitNotes */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DylKitNotes;
+		};
+		FC522B3D2F2AFE3700F39CCA /* DylKitAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DylKitAPI;
+		};
+		FC522B3F2F2AFE7700F39CCA /* DylKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC522B382F2AFDAA00F39CCA /* XCRemoteSwiftPackageReference "GRDB" */;
+			productName = DylKit;
+		};
+		FC522B412F2AFE7700F39CCA /* DylKitAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC522B382F2AFDAA00F39CCA /* XCRemoteSwiftPackageReference "GRDB" */;
+			productName = DylKitAPI;
+		};
+		FC522B432F2AFE7700F39CCA /* DylKitNotes */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC522B382F2AFDAA00F39CCA /* XCRemoteSwiftPackageReference "GRDB" */;
+			productName = DylKitNotes;
+		};
+		FC522B462F2AFEC900F39CCA /* DylKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DylKit;
+		};
+		FC522B482F2AFEC900F39CCA /* DylKitAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DylKitAPI;
+		};
+		FC522B4A2F2AFEC900F39CCA /* DylKitNotes */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DylKitNotes;
 		};
 		FC94A9DE2AE2436300E1A595 /* DylKit */ = {
 			isa = XCSwiftPackageProductDependency;

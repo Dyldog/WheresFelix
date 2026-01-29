@@ -8,6 +8,7 @@
 import Foundation
 import GRDB
 import DylKit
+import DylKitAPI
 
 struct Movie: Hashable, Codable, TableRecord, EncodableRecord, PersistableRecord {
     let id: Int

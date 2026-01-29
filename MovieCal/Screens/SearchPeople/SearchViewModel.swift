@@ -18,7 +18,7 @@ class SearchViewModel: ObservableObject, Identifiable {
     let onSelect: BlockIn<Person>
     
     var searchText: String = "" { didSet { search() } }
-    private var searchRequest: URLSessionDataTask?
+    private var searchRequest: Task<Void, Never>?
     
     init(known: [Person], onSelect: @escaping BlockIn<Person>) {
         self.knownPeople = known

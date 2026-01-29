@@ -7,6 +7,7 @@
 
 import Foundation
 import DylKit
+import DylKitNotes
 
 struct MovieNote {
     let title: String
