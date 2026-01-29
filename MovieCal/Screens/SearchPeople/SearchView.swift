@@ -40,9 +40,11 @@ struct SearchView: View {
             model.onSelect()
         } label: {
             HStack {
-                LazyImage(url: model.imageURL)
-                    .frame(width: 100, height: 150)
-                    .cornerRadius(10)
+                LazyImage(url: model.imageURL) { state in
+                    state.image?.resizable()
+                }
+                .frame(width: 100, height: 150)
+                .cornerRadius(10)
                 Text(model.text)
             }
         }

@@ -12,18 +12,20 @@ struct MovieCell: View {
     let movie: MovieCellModel
     
     var body: some View {
-        LazyImage(url: movie.imageURL)
-            .aspectRatio(1.0/1.5, contentMode: .fit)
-            .cornerRadius(10)
-            .overlay(alignment: .bottomTrailing) {
-                Text("\(movie.numCredits)")
-                    .padding(.horizontal, 6)
-                    .aspectRatio(1, contentMode: .fit)
-                    .background(Color.red)
-                    .foregroundColor(.white)
-                    .font(.body.bold())
-                    .cornerRadius(10)
-                    .padding(4)
-            }
+        LazyImage(url: movie.imageURL) { state in
+            state.image?.resizable()
+        }
+        .aspectRatio(1.0/1.5, contentMode: .fit)
+        .cornerRadius(10)
+        .overlay(alignment: .bottomTrailing) {
+            Text("\(movie.numCredits)")
+                .padding(.horizontal, 6)
+                .aspectRatio(1, contentMode: .fit)
+                .background(Color.red)
+                .foregroundColor(.white)
+                .font(.body.bold())
+                .cornerRadius(10)
+                .padding(4)
+        }
     }
 }

@@ -28,9 +28,11 @@ struct DetailView: View {
                                 viewModel.knownPersonTapped(person)
                             } label: {
                                 VStack(alignment: .center) {
-                                    LazyImage(url: person.imageURL)
-                                        .aspectRatio(1.0/1.5, contentMode: .fit)
-                                        .cornerRadius(10)
+                                    LazyImage(url: person.imageURL){ state in
+                                        state.image?.resizable()
+                                    }
+                                    .aspectRatio(1.0/1.5, contentMode: .fit)
+                                    .cornerRadius(10)
                                     Text(person.name)
                                         .font(.caption).bold()
                                 }
@@ -48,9 +50,11 @@ struct DetailView: View {
                                 viewModel.personTapped(person)
                             } label: {
                                 VStack(alignment: .center) {
-                                    LazyImage(url: person.imageURL)
-                                        .aspectRatio(1.0/1.5, contentMode: .fit)
-                                        .cornerRadius(10)
+                                    LazyImage(url: person.imageURL) { state in
+                                        state.image?.resizable()
+                                    }
+                                    .aspectRatio(1.0/1.5, contentMode: .fit)
+                                    .cornerRadius(10)
                                     Text(person.name)
                                         .font(.caption).bold()
                                 }

@@ -28,10 +28,12 @@ struct HideMovieView: View {
     
     private var header: some View {
         HStack {
-            LazyImage(url: movie.imageURL)
-                .aspectRatio(1.0/1.5, contentMode: .fit)
-                .frame(height: 100)
-                .cornerRadius(10)
+            LazyImage(url: movie.imageURL) { state in
+                state.image?.resizable()
+            }
+            .aspectRatio(1.0/1.5, contentMode: .fit)
+            .frame(height: 100)
+            .cornerRadius(10)
             Text(movie.title)
                 .font(.caption).bold()
         }
@@ -55,9 +57,11 @@ struct HideMovieView: View {
         } label: {
             ZStack {
                 VStack(alignment: .center) {
-                    LazyImage(url: person.imageURL)
-                        .aspectRatio(1.0/1.5, contentMode: .fit)
-                        .cornerRadius(10)
+                    LazyImage(url: person.imageURL) { state in
+                        state.image?.resizable()
+                    }
+                    .aspectRatio(1.0/1.5, contentMode: .fit)
+                    .cornerRadius(10)
                     Text(person.name)
                         .font(.caption).bold()
                 }

@@ -37,9 +37,11 @@ struct AddedPeopleView: View {
                     viewModel.didSelectPerson(person)
                 } label: {
                     HStack {
-                        LazyImage(url: person.imageURL)
-                            .frame(width: 100, height: 150)
-                            .cornerRadius(10)
+                        LazyImage(url: person.imageURL){ state in
+                            state.image?.resizable()
+                        }
+                        .frame(width: 100, height: 150)
+                        .cornerRadius(10)
                         VStack {
                             Text(person.title)
                         }
